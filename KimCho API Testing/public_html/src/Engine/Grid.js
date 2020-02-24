@@ -24,6 +24,7 @@ function Grid(gridLength, gridHeight, cellWidth, cellHeight) {
     this.mCellWidth = 1;
     this.mCellHeight = 1;
     
+    this.mGridLineThickness = 1;
     this.mDrawLines = false;
     
     this.mGridLinesX = [];
@@ -72,30 +73,7 @@ Grid.prototype.initialize = function (gridLength, gridHeight, cellWidth, cellHei
         this.mGridArray.push(yArray);
     }
     
-    this.createLines();
-};
-
-Grid.prototype.createLines = function () {
-    var totalGridWidth = this.mGridLength * this.mCellWidth;
-    var totalGridHeight = this.mGridHeight * this.mCellHeight;
-    var startXPos = this.mXform.getXPos() - (totalGridWidth / 2);
-    var startYPos = this.mXform.getYPos() - (totalGridHeight / 2);
-    
-    for (var i = 0; i <= this.mGridLength; i++) {
-        var temp = new Renderable();
-        temp.getXform().setPosition(startXPos + (i * this.mCellWidth), this.mXform.getYPos());
-        temp.getXform().setWidth(0.05);
-        temp.getXform().setHeight(totalGridHeight);
-        this.mGridLinesX[i] = temp;
-    }
-    
-    for (var j = 0; j <= this.mGridHeight; j++) {
-        var temp = new Renderable();
-        temp.getXform().setPosition(this.mXform.getXPos(), startYPos + (j * this.mCellHeight));
-        temp.getXform().setWidth(totalGridWidth);
-        temp.getXform().setHeight(0.05);
-        this.mGridLinesY[j] = temp;
-    }
+    this.updateLines();
 };
 
 /**
@@ -103,7 +81,7 @@ Grid.prototype.createLines = function () {
  * @returns {void}
  */
 Grid.prototype.update = function () {
-
+    this.updateLines();
 };
 
 /**
@@ -114,6 +92,29 @@ Grid.prototype.update = function () {
 Grid.prototype.draw = function (vpMatrix) {
     if (this.mDrawLines) {
         this.drawLines(vpMatrix);
+    }
+};
+
+Grid.prototype.updateLines = function () {
+    var totalGridWidth = this.mGridLength * this.mCellWidth;
+    var totalGridHeight = this.mGridHeight * this.mCellHeight;
+    var startXPos = this.mXform.getXPos() - (totalGridWidth / 2);
+    var startYPos = this.mXform.getYPos() - (totalGridHeight / 2);
+    
+    for (var i = 0; i <= this.mGridLength; i++) {
+        var temp = new Renderable();
+        temp.getXform().setPosition(startXPos + (i * this.mCellWidth), this.mXform.getYPos());
+        temp.getXform().setWidth(this.mGridLineThickness);
+        temp.getXform().setHeight(totalGridHeight);
+        this.mGridLinesX[i] = temp;
+    }
+    
+    for (var j = 0; j <= this.mGridHeight; j++) {
+        var temp = new Renderable();
+        temp.getXform().setPosition(this.mXform.getXPos(), startYPos + (j * this.mCellHeight));
+        temp.getXform().setWidth(totalGridWidth);
+        temp.getXform().setHeight(this.mGridLineThickness);
+        this.mGridLinesY[j] = temp;
     }
 };
 
@@ -139,6 +140,10 @@ Grid.prototype.drawLines = function (vpMatrix) {
  */
 Grid.prototype.setDrawLines = function (bool) {
     this.mDrawLines = bool;
+};
+
+Grid.prototype.setGridLineThickness = function (thickness) {
+    this.mGridLineThickness = thickness;
 };
 
 /**
@@ -177,11 +182,11 @@ Grid.prototype.getCellHeight = function () {
 
 /**
  * Will set the number of cells along the x-axis.
- * @param {int} xLength - The number of cells on the x-axis.
+ * @param {int} length - The number of cells on the x-axis.
  * @returns {void}
  */
-Grid.prototype.setGridLength = function (xLength) {
-    this.mGridLength = xLength;
+Grid.prototype.setGridLength = function (length) {
+    this.mGridLength = length;
 };
 
 /**
@@ -194,11 +199,11 @@ Grid.prototype.getGridLength = function () {
 
 /**
  * Will set the number of cells along the y-axis.
- * @param {int} yLength - The number of cells on the y-axis.
+ * @param {int} height - The number of cells on the y-axis.
  * @returns {void} 
  */
-Grid.prototype.setGridHeight = function (yLength) {
-    this.mGridHeight = yLength;
+Grid.prototype.setGridHeight = function (height) {
+    this.mGridHeight = height;
 };
 
 /**

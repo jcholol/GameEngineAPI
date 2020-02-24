@@ -65,12 +65,14 @@ MainView.prototype.initialize = function () {
     // Step A: set up the cameras
     this.mCamera = new Camera(
             vec2.fromValues(0, 0), // position of the camera
-            10, // width of camera
+            1000, // width of camera
             [0, 0, 500, 400]           // viewport (orgX, orgY, width, height)
             );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
     
-    this.mGrid = new Grid(10, 10, 1, 1);
+    this.mGrid = new Grid(100, 100, 10, 10);
+    this.mGrid.getXform().setPosition(0, 0);
+    this.mGrid.setGridLineThickness(1);
 };
 
 MainView.prototype._initText = function (font, posX, posY, color, textH) {
@@ -96,6 +98,7 @@ MainView.prototype.draw = function () {
 // anything from this function!
 MainView.prototype.update = function () {
     this.handleInput();
+    this.mGrid.update();
     this.mGrid.setDrawLines(true);
 };
 
