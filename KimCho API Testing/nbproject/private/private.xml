@@ -7,13 +7,10 @@
         <group name="AllBookProjects"/>
         <group name="Apress-2d-game-engine"/>
         <group>
-            <file>file:/Users/davidkim/OneDrive/UW-Stuff/Winter%202020%20-%20Current/CSS452/GroupProject/DavidKimMP4/public_html/src/Engine/Core/Engine_VertexBuffer.js</file>
-            <file>file:/Users/davidkim/OneDrive/UW-Stuff/Winter%202020%20-%20Current/CSS452/GroupProject/DavidKimMP4/public_html/src/MyGame/GameObjects/MainView.js</file>
-            <file>file:/Users/davidkim/OneDrive/UW-Stuff/Winter%202020%20-%20Current/CSS452/GroupProject/DavidKimMP4/public_html/src/Engine/Renderables/Renderable.js</file>
-            <file>file:/Users/davidkim/OneDrive/UW-Stuff/Winter%202020%20-%20Current/CSS452/GroupProject/DavidKimMP4/public_html/src/Engine/Cell.js</file>
-            <file>file:/Users/davidkim/OneDrive/UW-Stuff/Winter%202020%20-%20Current/CSS452/GroupProject/DavidKimMP4/public_html/src/Engine/Grid.js</file>
-            <file>file:/Users/davidkim/OneDrive/UW-Stuff/Winter%202020%20-%20Current/CSS452/GroupProject/DavidKimMP4/public_html/index.html</file>
-            <file>file:/Users/davidkim/OneDrive/UW-Stuff/Winter%202020%20-%20Current/CSS452/GroupProject/DavidKimMP4/public_html/src/Engine/Shaders/SimpleShader.js</file>
+            <file>file:/Users/davidkim/Desktop/Github/GameEngineAPI/KimCho%20API%20Testing/public_html/src/Engine/Core/Resources/Engine_ResourceMap.js</file>
+            <file>file:/Users/davidkim/Desktop/Github/GameEngineAPI/KimCho%20API%20Testing/public_html/src/Engine/Grid.js</file>
+            <file>file:/Users/davidkim/Desktop/Github/GameEngineAPI/KimCho%20API%20Testing/public_html/index.html</file>
+            <file>file:/Users/davidkim/Desktop/Github/GameEngineAPI/KimCho%20API%20Testing/public_html/src/MyGame/GameObjects/MainView.js</file>
         </group>
     </open-files>
 </project-private>

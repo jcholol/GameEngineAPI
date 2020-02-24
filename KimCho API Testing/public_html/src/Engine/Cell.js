@@ -44,13 +44,19 @@ function Cell(x, y, width, height, gridParent) {
     
     this.initialize(x, y, width, height);
 }
-
+ 
+/**
+ * Will initialize the cell.
+ * @param {int} x - x-axis position in grid.
+ * @param {int} y - y-axis position in grid.
+ * @param {int} width - Width of the cell.
+ * @param {int} height - Height of the cell.
+ * @returns {void}
+ */
 Cell.prototype.initialize = function (x, y, width, height) {
     this.setCellPositionInGrid(x, y);
-    this.setCellWidth();
-    this.setCellHeight();
-    
-    this.mXform.setPosition();
+    this.setCellWidth(width);
+    this.setCellHeight(height);
 };
 
 /**
@@ -69,28 +75,57 @@ Cell.prototype.draw = function () {
     
 };
 
+/**
+ * Sets the object in the cell.
+ * @param {Object} obj
+ * @returns {void}
+ */
 Cell.prototype.setObject = function (obj) {
     this.mObject = obj;
 };
 
+/**
+ * Gets and returns the object in the cell.
+ * @returns {Object}
+ */
 Cell.prototype.getObject = function () {
     return this.mObject;
 };
 
+/**
+ * Sets the cells indexed position in the grid.
+ * @param {int} x
+ * @param {int} y
+ * @returns {void}
+ */
 Cell.prototype.setCellPositionInGrid = function (x, y) {
     this.mCellGridXPos = x;
     this.mCellGridYPos = y;
 };
 
-Cell.prototype.getCellPositionInGrid = function (x, y) {
-    var pos = {x, y};
+/**
+ * Gets the cell's indexed position in the grid.
+ * @returns {[int, int]}
+ */
+Cell.prototype.getCellPositionInGrid = function () {
+    var pos = [this.mCellGridXPos, this.mCellGridYPos];
     return pos;
 };
 
+/**
+ * Sets the width of the cell.
+ * @param {double} width
+ * @returns {undefined}
+ */
 Cell.prototype.setCellWidth = function (width) {
     this.mCellWidth = width;
 };
 
+/**
+ * Sets the height of the cell.
+ * @param {double} height
+ * @returns {void}
+ */
 Cell.prototype.setCellHeight = function (height) {
     this.mCellHeight = height;
 };

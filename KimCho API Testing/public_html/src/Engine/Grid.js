@@ -24,6 +24,8 @@ function Grid(gridLength, gridHeight, cellWidth, cellHeight) {
     this.mCellWidth = 1;
     this.mCellHeight = 1;
     
+    this.mGridMap = null;
+    
     this.mGridLineThickness = 1;
     this.mDrawLines = false;
     
@@ -95,6 +97,10 @@ Grid.prototype.draw = function (vpMatrix) {
     }
 };
 
+/**
+ * Helper function for updating the grid line state.
+ * @returns {void}
+ */
 Grid.prototype.updateLines = function () {
     var totalGridWidth = this.mGridLength * this.mCellWidth;
     var totalGridHeight = this.mGridHeight * this.mCellHeight;
@@ -142,6 +148,11 @@ Grid.prototype.setDrawLines = function (bool) {
     this.mDrawLines = bool;
 };
 
+/**
+ * Will set the thickness of the grid lines.
+ * @param {int} thickness - The thickness of the grid lines.
+ * @returns {void}
+ */
 Grid.prototype.setGridLineThickness = function (thickness) {
     this.mGridLineThickness = thickness;
 };
