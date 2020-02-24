@@ -67,7 +67,7 @@ Grid.prototype.setCellWidth = function (width) {
 
 /**
  * Will get the current set width for the grid cells.
- * @returns {int} - Returns an int representing the grid cell width. 
+ * @returns {int} Returns an int representing the grid cell width. 
  */
 Grid.prototype.getCellWidth = function () {
     return this.mCellWidth;
@@ -83,7 +83,7 @@ Grid.prototype.setCellHeight = function (height) {
 
 /**
  * Will get the current set height for the grid cells.
- * @returns {int} - Returns an int representing the grid cell height. 
+ * @returns {int} Returns an int representing the grid cell height. 
  */
 Grid.prototype.getCellHeight = function () {
     return this.mCellHeight;
@@ -99,7 +99,7 @@ Grid.prototype.setHorizontalLength = function (xLength) {
 
 /**
  * Returns the number of cells on the x-axis.
- * @returns {Number|int} - The number of cells on the x-axis.
+ * @returns {Number|int} The number of cells on the x-axis.
  */
 Grid.prototype.getHorizontalLength = function () {
     return this.mHorizontalLength;
@@ -115,7 +115,7 @@ Grid.prototype.setVerticalLength = function (yLength) {
 
 /**
  * Returns the number of cells on the y-axis.
- * @returns {Number|int} - The number of cells on the y-axis.
+ * @returns {Number|int} The number of cells on the y-axis.
  */
 Grid.prototype.getVerticalLength = function () {
     return this.mVerticalLength;
@@ -134,7 +134,7 @@ Grid.prototype.setObjectAt = function (x, y) {
  * Gets the object at the specified cell coordinate.
  * @param {int} x - The x-coordinate.
  * @param {int} y - The y-coordinate.
- * @returns {Object} - The object at the specified cell coordinate.
+ * @returns {Object} The object at the specified cell coordinate.
  */
 Grid.prototype.getObjectAt = function (x, y) {
     
@@ -142,7 +142,7 @@ Grid.prototype.getObjectAt = function (x, y) {
 
 /**
  * Gets the transform of the current grid object.
- * @returns {Transform} - Transform of the grid object.
+ * @returns {Transform} Transform of the grid object.
  */
 Grid.prototype.getXform = function () {
     return this.mXform;
