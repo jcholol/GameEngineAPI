@@ -1,6 +1,5 @@
 /* 
  * File: Grid.js
- * Encapsulates the user define WC and Viewport functionality
  */
 
 /*jslint node: true, vars: true */
@@ -13,14 +12,19 @@
  * @constructor
  * @param {int} x - Number of cells along the x-axis.
  * @param {int} y - Number of cells along the y-axis.
+ * @param {int} cellWidth - The width of the cells in the grid.
+ * @param {int} cellHeight - The height of the cells in the grid.
+ * @returns {Grid}
  */
-function Grid(x, y) {
-    this.mShader = gEngine.DefaultResources.getConstColorShader();  // this is the default
+function Grid(x, y, cellWidth, cellHeight) {
+    this.mGridArray = [];
     this.mXform = new Transform(); // transform that moves this object around
-    this.mHorizontalLength = 0; // Number of cells in the x-axis
-    this.mVerticalLength = 0; // Number of cells in the y-axis
+    this.mGridLength = 0; // Number of cells in the x-axis
+    this.mGridHeight = 0; // Number of cells in the y-axis
     this.mCellWidth = 1;
     this.mCellHeight = 1;
+    
+    this.mShader = gEngine.DefaultResources.getConstColorShader();  // this is the default
     
     // Converts x and y if any of them are null or undefined
     if (x === null || x === undefined) {
@@ -30,21 +34,43 @@ function Grid(x, y) {
         y = 0;
     }
     
-    this.initialize(x, y);
+    // Converts cellWidth and cellHeight if any of them are null or undefined
+    if (cellWidth === null || cellWidth === undefined) {
+        cellWidth = 1;
+    }
+    if (cellHeight === null || cellHeight === undefined) {
+        cellHeight = 1;
+    }
+    
+    this.initialize(x, y, cellWidth, cellHeight);
 }
 
 /**
  * Initializes the grid.
  * @param {int} x - Number of cells along the x-axis.
  * @param {int} y - Number of cells along the y-axis.
+ * @param {int} cellWidth - The width of the cells in the grid.
+ * @param {int} cellHeight - The height of the cells in the grid.
+ * @returns {void}
  */
-Grid.prototype.initialize = function (x, y) {
-    this.setHorizontalLength(x);
-    this.setVerticalLength(y);
+Grid.prototype.initialize = function (x, y, cellWidth, cellHeight) {
+    this.setGridLength(x);
+    this.setGridHeight(y);
+    this.setCellWidth(cellWidth);
+    this.setCellHeight(cellHeight);
+    
+    for (var i = 0; i < this.mGridLength; i++) {
+        var yArray = [];
+        for (var j = 0; j < this.mGridHeight; j++) {
+            yArray[j] = new Cell(i, j, this.mCellWidth, this.mCellHeight);
+        }
+        this.mGridArray.push(yArray);
+    }
 };
 
 /**
- * Updates the grid state.
+ * Updates the grid's state.
+ * @returns {void}
  */
 Grid.prototype.update = function () {
     
@@ -52,6 +78,7 @@ Grid.prototype.update = function () {
 
 /**
  * Draws the grid and its state.
+ * @returns {void}
  */
 Grid.prototype.draw = function () {
     
@@ -60,6 +87,7 @@ Grid.prototype.draw = function () {
 /**
  * Will set the width of each cell in the grid.
  * @param {int} width - Represents a number to set the grid cell width.
+ * @returns {void}
  */
 Grid.prototype.setCellWidth = function (width) {
     this.mCellWidth = width;
@@ -76,6 +104,7 @@ Grid.prototype.getCellWidth = function () {
 /**
  * Will set the height of each cell in the grid.
  * @param {int} height - Represents a number to set the grid cell height.
+ * @returns {void}
  */
 Grid.prototype.setCellHeight = function (height) {
     this.mCellHeight = height;
@@ -92,39 +121,42 @@ Grid.prototype.getCellHeight = function () {
 /**
  * Will set the number of cells along the x-axis.
  * @param {int} xLength - The number of cells on the x-axis.
+ * @returns {void}
  */
-Grid.prototype.setHorizontalLength = function (xLength) {
-    this.mHorizontalLength = xLength;
+Grid.prototype.setGridLength = function (xLength) {
+    this.mGridLength = xLength;
 };
 
 /**
  * Returns the number of cells on the x-axis.
  * @returns {Number|int} The number of cells on the x-axis.
  */
-Grid.prototype.getHorizontalLength = function () {
-    return this.mHorizontalLength;
+Grid.prototype.getGridLength = function () {
+    return this.mGridLength;
 };
 
 /**
  * Will set the number of cells along the y-axis.
  * @param {int} yLength - The number of cells on the y-axis.
+ * @returns {void} 
  */
-Grid.prototype.setVerticalLength = function (yLength) {
-    this.mVerticalLength = yLength;
+Grid.prototype.setGridHeight = function (yLength) {
+    this.mGridHeight = yLength;
 };
 
 /**
  * Returns the number of cells on the y-axis.
  * @returns {Number|int} The number of cells on the y-axis.
  */
-Grid.prototype.getVerticalLength = function () {
-    return this.mVerticalLength;
+Grid.prototype.getGridHeight = function () {
+    return this.mGridHeight;
 };
 
 /**
  * Sets the object at the specified cell coordinate.
  * @param {int} x - The x-coordinate.
  * @param {int} y - The y-coordinate.
+ * @returns {void}
  */
 Grid.prototype.setObjectAt = function (x, y) {
     
