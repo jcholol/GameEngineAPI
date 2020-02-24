@@ -105,7 +105,7 @@ Cell.prototype.setCellPositionInGrid = function (x, y) {
 
 /**
  * Gets the cell's indexed position in the grid.
- * @returns {[int, int]}
+ * @returns {array}
  */
 Cell.prototype.getCellPositionInGrid = function () {
     var pos = [this.mCellGridXPos, this.mCellGridYPos];
