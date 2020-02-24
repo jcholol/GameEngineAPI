@@ -141,7 +141,7 @@ Grid.prototype.drawLines = function (vpMatrix) {
 
 /**
  * Will toggle between drawing and not drawing the grid lines.
- * @param {boolean} bool
+ * @param {boolean} bool - Boolean to determine whether or not to draw the grid lines.
  * @returns {void}
  */
 Grid.prototype.setDrawLines = function (bool) {
