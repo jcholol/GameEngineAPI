@@ -1,2 +1,2 @@
 # GameEngineAPI
-[KimCho API Link](https://kimdav011.github.io/GameEngineAPI/out/index.html)
+[KimCho API Documentation Link](https://kimdav011.github.io/GameEngineAPI/out/index.html)
