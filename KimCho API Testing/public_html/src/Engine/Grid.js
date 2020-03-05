@@ -26,9 +26,9 @@ function Grid(gridLength, gridHeight, cellWidth, cellHeight) {
     
     this.mGridMap = null;
     
+    // Debug Draw Lines
     this.mGridLineThickness = 1;
     this.mDrawLines = false;
-    
     this.mGridLinesX = [];
     this.mGridLinesY = [];
 
@@ -70,12 +70,12 @@ Grid.prototype.initialize = function (gridLength, gridHeight, cellWidth, cellHei
     for (var i = 0; i < this.mGridLength; i++) {
         var yArray = [];
         for (var j = 0; j < this.mGridHeight; j++) {
-            yArray[j] = new Cell(i, j, this.mCellWidth, this.mCellHeight);
+            yArray[j] = new Cell(i, j, this.mCellWidth, this.mCellHeight, this);
         }
         this.mGridArray.push(yArray);
     }
     
-    this.updateLines();
+    this._updateLines();
 };
 
 /**
@@ -83,7 +83,7 @@ Grid.prototype.initialize = function (gridLength, gridHeight, cellWidth, cellHei
  * @returns {void}
  */
 Grid.prototype.update = function () {
-    this.updateLines();
+    this._updateLines();
 };
 
 /**
@@ -101,7 +101,7 @@ Grid.prototype.draw = function (vpMatrix) {
  * Helper function for updating the grid line state.
  * @returns {void}
  */
-Grid.prototype.updateLines = function () {
+Grid.prototype._updateLines = function () {
     var totalGridWidth = this.mGridLength * this.mCellWidth;
     var totalGridHeight = this.mGridHeight * this.mCellHeight;
     var startXPos = this.mXform.getXPos() - (totalGridWidth / 2);
@@ -236,23 +236,25 @@ Grid.prototype.setObjectAt = function (x, y, obj) {
     
 };
 
-/**
- * Gets the object at the specified cell coordinate.
- * @param {int} x - The x-coordinate.
- * @param {int} y - The y-coordinate.
- * @returns {Object} The object at the specified cell coordinate.
- */
-Grid.prototype.getObjectAt = function (x, y) {
+Grid.prototype.cellToWorld = function (worldPosition) {
+    var localizedX = worldPosition[0] - (this.getXform().getXPos());
+    var localizedY =  + worldPosition[1] - (this.getXform().getYPos());
     
-};
-
-/**
- * Will look through the grid to see if a specified object exists.
- * @param {Object} obj - The object to check for.
- * @returns {boolean}
- */
-Grid.prototype.contains = function (obj) {
+    // Checks if point is within the grid
+    if (localizedX < 0 || localizedX > this.getXform().getXPos() + (this.getGridLength() * this.getCellWidth()) ||
+        localizedY < 0 || localizedY > this.getXform().getYPos() + (this.getGridHeight() * this.getCellHeight())) {
+        console.log("out of bounds");
+        return;
+    }
     
+    console.log(localizedX + ", " + localizedY);
+    
+    var xIndex = Math.floor(localizedX / this.getCellWidth());
+    var yIndex = Math.floor(localizedY / this.getCellHeight());
+    
+    console.log(xIndex + ", " + yIndex);
+    
+    return this.mGridArray[xIndex][yIndex].cellToWorld();
 };
 
 /**

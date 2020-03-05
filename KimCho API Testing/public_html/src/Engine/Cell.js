@@ -3,7 +3,7 @@
  */
 
 /*jslint node: true, vars: true */
-/*global gEngine: false, SimpleShader: false, Renderable: false, mat4: false, vec3: false */
+/*global gEngine: false, SimpleShader: false, Renderable: false, mat4: false, vec3: false, vec2: false */
 /* find out more about jslint: http://www.jslint.com/help.html */
 "use strict";
 
@@ -19,8 +19,6 @@
  */
 function Cell(x, y, width, height, gridParent) {
     this.mGridParent = gridParent;
-    this.mXform = new Transform();
-    this.mObject = null;
     this.mCellWidth = 1;
     this.mCellHeight = 1;
     this.mCellGridXPos = 0;
@@ -54,7 +52,7 @@ function Cell(x, y, width, height, gridParent) {
  * @returns {void}
  */
 Cell.prototype.initialize = function (x, y, width, height) {
-    this.setCellPositionInGrid(x, y);
+    this.setCellIndexInGrid(x, y);
     this.setCellWidth(width);
     this.setCellHeight(height);
 };
@@ -68,37 +66,12 @@ Cell.prototype.update = function () {
 };
 
 /**
- * Draws the cell's state.
- * @returns {void}
- */
-Cell.prototype.draw = function () {
-    
-};
-
-/**
- * Sets the object in the cell.
- * @param {Object} obj
- * @returns {void}
- */
-Cell.prototype.setObject = function (obj) {
-    this.mObject = obj;
-};
-
-/**
- * Gets and returns the object in the cell.
- * @returns {Object}
- */
-Cell.prototype.getObject = function () {
-    return this.mObject;
-};
-
-/**
  * Sets the cells indexed position in the grid.
  * @param {int} x
  * @param {int} y
  * @returns {void}
  */
-Cell.prototype.setCellPositionInGrid = function (x, y) {
+Cell.prototype.setCellIndexInGrid = function (x, y) {
     this.mCellGridXPos = x;
     this.mCellGridYPos = y;
 };
@@ -107,7 +80,7 @@ Cell.prototype.setCellPositionInGrid = function (x, y) {
  * Gets the cell's indexed position in the grid.
  * @returns {array}
  */
-Cell.prototype.getCellPositionInGrid = function () {
+Cell.prototype.getCellIndexInGrid = function () {
     var pos = [this.mCellGridXPos, this.mCellGridYPos];
     return pos;
 };
@@ -131,11 +104,21 @@ Cell.prototype.setCellHeight = function (height) {
 };
 
 /**
- * Gets the transform of the current cell object.
- * @returns {Transform} Transform of the cell object.
+ * 
+ * @returns {vec2} World position of the cell position
  */
-Cell.prototype.getXform = function () {
-    return this.mXform;
+Cell.prototype.cellToWorld = function () {
+    var xForm = this.mGridParent.getXform();
+    var xOffset = this.mGridParent.getGridLength() * this.mGridParent.getCellWidth();
+    var yOffset = this.mGridParent.getGridHeight() * this.mGridParent.getCellHeight();
+    var xPos = (xForm.getXPos() - xOffset) + (this.mGridParent.getCellWidth() / 2);
+    var yPos = (xForm.getYPos() - yOffset) + (this.mGridParent.getCellHeight() / 2);
+    
+    var worldPos = vec2.fromValues(xPos, yPos);
+    return worldPos;
 };
 
+Cell.prototype.worldToCell = function () {
+    
+};
 
