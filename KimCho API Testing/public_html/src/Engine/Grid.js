@@ -66,6 +66,8 @@ Grid.prototype.initialize = function (gridLength, gridHeight, cellWidth, cellHei
     this.setGridHeight(gridHeight);
     this.setCellWidth(cellWidth);
     this.setCellHeight(cellHeight);
+    
+    this.mGridArray = [];
 
     for (var i = 0; i < this.mGridLength; i++) {
         var yArray = [];
@@ -164,6 +166,12 @@ Grid.prototype.setGridLineThickness = function (thickness) {
  */
 Grid.prototype.setCellWidth = function (width) {
     this.mCellWidth = width;
+    
+    for (var i = 0; i < this.mGridArray.length; i++) {
+        for (var j = 0; j < this.mGridArray[i].length; j++) {
+            this.mGridArray[i][j].setCellWidth(this.mCellWidth);
+        }
+    }
 };
 
 /**
@@ -181,6 +189,12 @@ Grid.prototype.getCellWidth = function () {
  */
 Grid.prototype.setCellHeight = function (height) {
     this.mCellHeight = height;
+    
+    for (var i = 0; i < this.mGridArray.length; i++) {
+        for (var j = 0; j < this.mGridArray[i].length; j++) {
+            this.mGridArray[i][j].setCellHeight(this.mCellHeight);
+        }
+    }
 };
 
 /**
@@ -251,6 +265,11 @@ Grid.prototype.setObjectAt = function (x, y, obj) {
  */
 Grid.prototype.cellToWorld = function (wc) {
     var positionInGrid = this._getIndexFromWC(wc);
+    
+    if (positionInGrid === null || positionInGrid === undefined) {
+        return;
+    }
+    
     return this.mGridArray[positionInGrid[0]][positionInGrid[1]].cellToWorld();
 };
 
