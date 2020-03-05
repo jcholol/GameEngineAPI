@@ -128,65 +128,6 @@ SpriteAnimateRenderable.prototype.updateAnimation = function () {
         }
     }
 };
-
-SpriteAnimateRenderable.prototype.setElmCount = function (elmCount) {
-    this.mNumElems = elmCount;
-};
-
-SpriteAnimateRenderable.prototype.getElmCount = function () {
-    return this.mNumElems;
-};
-
-SpriteAnimateRenderable.prototype.getLeft = function () {
-    //console.log(this.mFirstElmLeft);
-    return this.mFirstElmLeft;
-};
-
-SpriteAnimateRenderable.prototype.getTop = function () {
-    //console.log(this.mElmTop);
-    return this.mElmTop;
-};
-
-SpriteAnimateRenderable.prototype.getWidth = function () {
-    //console.log(this.mElmWidth);
-    return this.mElmWidth;
-};
-
-SpriteAnimateRenderable.prototype.getHeight = function () {
-    //console.log(this.mElmHeight);
-    return this.mElmHeight;
-};
-
-// Update Sprite View Position
-SpriteAnimateRenderable.prototype.incXSpriteSequence = function (deltaX) {
-    if (this.mFirstElmLeft + this.mElmWidth + deltaX <= 1 && this.mFirstElmLeft + deltaX > -0.01) {
-        this.mFirstElmLeft += deltaX;
-    }
-    this._initAnimation();
-};
-
-// Update Sprite View Position
-SpriteAnimateRenderable.prototype.incYSpriteSequence = function (deltaY) {
-    if (this.mElmTop + deltaY <= 1 && this.mElmTop + deltaY > this.mElmHeight) {
-        this.mElmTop += deltaY;
-    }
-    this._initAnimation();
-};
-
-SpriteAnimateRenderable.prototype.incHeight = function (height) {
-    if (this.mElmTop - this.mElmHeight - height > 0 && this.mElmTop - this.mElmHeight - height < 1 
-            && this.mElmHeight + height > 0) {
-        this.mElmHeight += height;
-    }
-    this._initAnimation();
-};
-
-SpriteAnimateRenderable.prototype.incWidth = function (width) {
-    if (this.mFirstElmLeft + this.mElmWidth + width <= 1 && this.mElmWidth + width > 0) {
-        this.mElmWidth += width;
-    }
-    this._initAnimation();
-};
 //--- end of Public Methods
 //
 //</editor-fold>

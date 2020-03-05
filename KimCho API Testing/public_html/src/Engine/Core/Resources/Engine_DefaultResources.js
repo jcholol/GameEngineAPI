@@ -1,9 +1,8 @@
 /*
  * File: Engine_DefaultResources.js 
  */
-/*jslint node: true, vars: true, evil: true */
-/*global gEngine: false, SimpleShader: false, TextureShader: false,
-  SpriteShader: false */
+/*jslint node: true, vars: true, evil: true, White: true */
+/*global SimpleShader, TextureShader, SpriteShader, LineShader */
 /* find out more about jslint: http://www.jslint.com/help.html */
 
 
@@ -22,6 +21,8 @@ gEngine.DefaultResources = (function () {
     var kTextureFS = "src/GLSLShaders/TextureFS.glsl";  // Path to the texture FragmentShader
     var mTextureShader = null;
     var mSpriteShader = null;
+    var kLineFS = "src/GLSLShaders/LineFS.glsl";        // Path to the Line FragmentShader
+    var mLineShader = null;
 
     // Default font
     var kDefaultFont = "assets/fonts/system-default-font";
@@ -32,12 +33,14 @@ gEngine.DefaultResources = (function () {
         mConstColorShader = new SimpleShader(kSimpleVS, kSimpleFS);
         mTextureShader = new TextureShader(kTextureVS, kTextureFS);
         mSpriteShader =  new SpriteShader(kTextureVS, kTextureFS);
+        mLineShader =  new LineShader(kSimpleVS, kLineFS);
         callBackFunction();
     };
 
     var getConstColorShader = function () { return mConstColorShader; };
     var getTextureShader = function () { return mTextureShader; };
     var getSpriteShader = function () { return mSpriteShader; };
+    var getLineShader = function () { return mLineShader; };
 
     var initialize = function (callBackFunction) {
         // constant color shader: SimpleVS, and SimpleFS
@@ -48,10 +51,13 @@ gEngine.DefaultResources = (function () {
         gEngine.TextFileLoader.loadTextFile(kTextureVS, gEngine.TextFileLoader.eTextFileType.eTextFile);
         gEngine.TextFileLoader.loadTextFile(kTextureFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
 
+        // Line Shader:
+        gEngine.TextFileLoader.loadTextFile(kLineFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
+
         // load default font
         gEngine.Fonts.loadFont(kDefaultFont);
 
-        gEngine.ResourceMap.setLoadCompleteCallback(function() {_createShaders(callBackFunction);});
+        gEngine.ResourceMap.setLoadCompleteCallback(function s() {_createShaders(callBackFunction); });
     };
 
     // unload all resources
@@ -59,6 +65,7 @@ gEngine.DefaultResources = (function () {
         mConstColorShader.cleanUp();
         mTextureShader.cleanUp();
         mSpriteShader.cleanUp();
+        mLineShader.cleanUp();
 
         gEngine.TextFileLoader.unloadTextFile(kSimpleVS);
         gEngine.TextFileLoader.unloadTextFile(kSimpleFS);
@@ -66,6 +73,9 @@ gEngine.DefaultResources = (function () {
         // texture shader: 
         gEngine.TextFileLoader.unloadTextFile(kTextureVS);
         gEngine.TextFileLoader.unloadTextFile(kTextureFS);
+
+        // Line Shader:
+        gEngine.TextFileLoader.unloadTextFile(kLineFS);
 
         // default font
         gEngine.Fonts.unloadFont(kDefaultFont);
@@ -78,6 +88,7 @@ gEngine.DefaultResources = (function () {
         getConstColorShader: getConstColorShader,
         getTextureShader: getTextureShader,
         getSpriteShader: getSpriteShader,
+        getLineShader: getLineShader,
         getDefaultFont: getDefaultFont,
         cleanUp: cleanUp
     };

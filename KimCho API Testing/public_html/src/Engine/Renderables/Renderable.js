@@ -21,19 +21,18 @@ function Renderable() {
 //**-----------------------------------------
 // Public methods
 //**-----------------------------------------
-Renderable.prototype.draw = function (vpMatrix) {
+Renderable.prototype.draw = function (aCamera) {
     var gl = gEngine.Core.getGL();
-    this.mShader.activateShader(this.mColor, vpMatrix);  // always activate the shader first!
+    this.mShader.activateShader(this.mColor, aCamera);  // always activate the shader first!
     this.mShader.loadObjectTransform(this.mXform.getXform());
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };
 
 Renderable.prototype.getXform = function () { return this.mXform; };
 Renderable.prototype.setColor = function (color) { this.mColor = color; };
+Renderable.prototype.incAlpha = function (delta) { this.mColor[3] += delta; };
+Renderable.prototype.getAlpha = function () { return this.mColor[3]; };
 Renderable.prototype.getColor = function () { return this.mColor; };
-Renderable.prototype.getHeightRatio = function () {
-   return this.mXform.getHeight() / this.mXform.getWidth();
-};
 //--- end of Public Methods
 //</editor-fold>
 

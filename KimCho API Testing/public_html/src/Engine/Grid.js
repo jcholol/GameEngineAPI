@@ -88,12 +88,12 @@ Grid.prototype.update = function () {
 
 /**
  * Draws the grid and its state.
- * @param {mat4} vpMatrix - Viewport Matrix
+ * @param {Camera} aCamera - Camera to draw to.
  * @returns {void}
  */
-Grid.prototype.draw = function (vpMatrix) {
+Grid.prototype.draw = function (aCamera) {
     if (this.mDrawLines) {
-        this.drawLines(vpMatrix);
+        this.drawLines(aCamera);
     }
 };
 
@@ -126,16 +126,16 @@ Grid.prototype._updateLines = function () {
 
 /**
  * Draws the lines for the grid.
- * @param {mat4} vpMatrix - Viewport Matrix
+ * @param {Camera} aCamera - Camera to draw to.
  * @returns {void}
  */
-Grid.prototype.drawLines = function (vpMatrix) {
+Grid.prototype.drawLines = function (aCamera) {
     for (var i = 0; i < this.mGridLinesX.length; i++) {
-        this.mGridLinesX[i].draw(vpMatrix);
+        this.mGridLinesX[i].draw(aCamera);
     }
     
     for (var j = 0; j < this.mGridLinesY.length; j++) {
-        this.mGridLinesY[j].draw(vpMatrix);
+        this.mGridLinesY[j].draw(aCamera);
     }
 };
 
