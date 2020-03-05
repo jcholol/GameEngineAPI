@@ -75,8 +75,6 @@ MainView.prototype.initialize = function () {
     this.mGrid.setGridLineThickness(0.05);
     
     this.mGrid.getXform().setPosition(0, 0);
-    
-    console.log(this.mGrid.cellToWorld(vec2.fromValues(0, 0)));
 };
 
 MainView.prototype._initText = function (font, posX, posY, color, textH) {
@@ -104,6 +102,7 @@ MainView.prototype.update = function () {
     this.handleInput();
     this.mGrid.update();
     this.mGrid.setDrawLines(true);
+    console.log(this.mGrid.cellToWorld(vec2.fromValues(0, 0)));
 };
 
 MainView.prototype.handleInput = function () {

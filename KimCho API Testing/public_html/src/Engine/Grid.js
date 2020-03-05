@@ -237,12 +237,12 @@ Grid.prototype.setObjectAt = function (x, y, obj) {
 };
 
 Grid.prototype.cellToWorld = function (worldPosition) {
-    var localizedX = worldPosition[0] - (this.getXform().getXPos());
-    var localizedY =  + worldPosition[1] - (this.getXform().getYPos());
+    var localizedX = worldPosition[0] - ((this.getXform().getXPos()) - ((this.getGridLength() * this.getCellWidth()) / 2));
+    var localizedY =  + worldPosition[1] - (this.getXform().getYPos() - ((this.getGridHeight() * this.getCellHeight()) / 2));
     
     // Checks if point is within the grid
-    if (localizedX < 0 || localizedX > this.getXform().getXPos() + (this.getGridLength() * this.getCellWidth()) ||
-        localizedY < 0 || localizedY > this.getXform().getYPos() + (this.getGridHeight() * this.getCellHeight())) {
+    if (localizedX < 0 || localizedX > this.getGridLength() * this.getCellWidth() ||
+        localizedY < 0 || localizedY > this.getGridHeight() * this.getCellHeight()) {
         console.log("out of bounds");
         return;
     }

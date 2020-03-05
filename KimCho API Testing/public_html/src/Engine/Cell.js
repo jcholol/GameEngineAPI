@@ -109,10 +109,10 @@ Cell.prototype.setCellHeight = function (height) {
  */
 Cell.prototype.cellToWorld = function () {
     var xForm = this.mGridParent.getXform();
-    var xOffset = this.mGridParent.getGridLength() * this.mGridParent.getCellWidth();
-    var yOffset = this.mGridParent.getGridHeight() * this.mGridParent.getCellHeight();
-    var xPos = (xForm.getXPos() - xOffset) + (this.mGridParent.getCellWidth() / 2);
-    var yPos = (xForm.getYPos() - yOffset) + (this.mGridParent.getCellHeight() / 2);
+    var xOffset = (this.mGridParent.getGridLength() * this.mGridParent.getCellWidth()) / 2;
+    var yOffset = (this.mGridParent.getGridHeight() * this.mGridParent.getCellHeight()) / 2;
+    var xPos = (xForm.getXPos() - xOffset) + (this.mGridParent.getCellWidth() * this.mCellGridXPos) + (this.mGridParent.getCellWidth() / 2);
+    var yPos = (xForm.getYPos() - yOffset) + (this.mGridParent.getCellHeight() * this.mCellGridYPos) + (this.mGridParent.getCellHeight() / 2);
     
     var worldPos = vec2.fromValues(xPos, yPos);
     return worldPos;
