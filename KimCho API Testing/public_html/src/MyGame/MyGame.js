@@ -15,6 +15,10 @@ function MyGame() {
     // The camera to view the scene
     this.mCamera = null;
     this.mGrid = null;
+    
+    this.mMoveCameraOrigin = [0, 0];
+    
+    this.mRenderables = [];
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
@@ -33,11 +37,9 @@ MyGame.prototype.initialize = function () {
             );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
     
-    this.mGrid = new Grid(5, 5, 1, 1);
+    this.mGrid = new Grid(10, 10, 1, 1);
     this.mGrid.getXform().setPosition(0, 0);
     this.mGrid.setGridLineThickness(0.05);
-    
-    this.mGrid.getXform().setPosition(0, 0);
 };
 
 MyGame.prototype.draw = function () {
@@ -47,6 +49,10 @@ MyGame.prototype.draw = function () {
     this.mCamera.setupViewProjection();
     
     this.mGrid.draw(this.mCamera);
+    
+    this.mRenderables.forEach(item => {
+       item.draw(this.mCamera); 
+    });
 };
 
 MyGame.prototype.update = function () {
@@ -72,19 +78,6 @@ MyGame.prototype.handleInput = function () {
         this.mGrid.setCellHeight(this.mGrid.getCellHeight() + xDelta);
     }
     
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left)) {
-        this.mGrid.getXform().incXPosBy(-xDelta);
-    }
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) {
-        this.mGrid.getXform().incXPosBy(xDelta);
-    }
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Down)) {
-        this.mGrid.getXform().incYPosBy(-xDelta);
-    }
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Up)) {
-        this.mGrid.getXform().incYPosBy(xDelta);
-    }
-    
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Z)) {
         this.mCamera.setWCWidth(this.mCamera.getWCWidth() - (xDelta) * 10);
     }
@@ -93,6 +86,23 @@ MyGame.prototype.handleInput = function () {
     }
     
     if (gEngine.Input.isButtonClicked(gEngine.Input.mouseButton.Left)) {
-        console.log(this.mGrid.cellToWorld(vec2.fromValues(this.mCamera.mouseWCX(), this.mCamera.mouseWCY())));
+        var temp = new Renderable();
+        this.mGrid.setObjectAt(this.mCamera.mouseWCX(), this.mCamera.mouseWCY(), temp);
+        this.mRenderables.push(temp);
+    }
+    
+    if (gEngine.Input.isButtonClicked(gEngine.Input.mouseButton.Right)) {
+        this.mMoveCameraOrigin = [this.mCamera.mouseWCX(), this.mCamera.mouseWCY()];
+    }
+    
+    if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Right)) {
+        var x = this.mCamera.getWCCenter()[0] + (this.mMoveCameraOrigin[0] - this.mCamera.mouseWCX()) * 10;
+        var y = this.mCamera.getWCCenter()[1] + (this.mMoveCameraOrigin[1] - this.mCamera.mouseWCY()) * 10;
+        
+        this.mCamera.setWCCenter(x, y);
+        this.mCamera.update();
+        
+        this.mMoveCameraOrigin[0] = this.mCamera.mouseWCX();
+        this.mMoveCameraOrigin[1] = this.mCamera.mouseWCY();
     }
 };

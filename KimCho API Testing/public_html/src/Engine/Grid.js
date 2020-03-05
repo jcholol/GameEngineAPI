@@ -3,7 +3,7 @@
  */
 
 /*jslint node: true, vars: true */
-/*global gEngine: false, SimpleShader: false, Renderable: false, mat4: false, vec3: false */
+/*global gEngine: false, SimpleShader: false, Renderable: false, mat4: false, vec3: false, vec2: false */
 /* find out more about jslint: http://www.jslint.com/help.html */
 "use strict";
 
@@ -226,35 +226,41 @@ Grid.prototype.getGridHeight = function () {
 };
 
 /**
- * Sets the object at the specified cell coordinate.
+ * Sets the object at the specified cell position.
  * @param {int} x - The x-coordinate.
  * @param {int} y - The y-coordinate.
  * @param {Object} obj - The object you want to put into the grid cell.
  * @returns {void}
  */
 Grid.prototype.setObjectAt = function (x, y, obj) {
+    var wc = vec2.fromValues(x, y);
+    var cellWC = this.cellToWorld(wc);
     
-};
-
-Grid.prototype.cellToWorld = function (worldPosition) {
-    var localizedX = worldPosition[0] - ((this.getXform().getXPos()) - ((this.getGridLength() * this.getCellWidth()) / 2));
-    var localizedY =  + worldPosition[1] - (this.getXform().getYPos() - ((this.getGridHeight() * this.getCellHeight()) / 2));
-    
-    // Checks if point is within the grid
-    if (localizedX < 0 || localizedX > this.getGridLength() * this.getCellWidth() ||
-        localizedY < 0 || localizedY > this.getGridHeight() * this.getCellHeight()) {
-        console.log("out of bounds");
+    if (cellWC === null || cellWC === undefined
+            || obj === null || obj === undefined) {
         return;
     }
     
-    console.log(localizedX + ", " + localizedY);
-    
-    var xIndex = Math.floor(localizedX / this.getCellWidth());
-    var yIndex = Math.floor(localizedY / this.getCellHeight());
-    
-    console.log(xIndex + ", " + yIndex);
-    
-    return this.mGridArray[xIndex][yIndex].cellToWorld();
+    obj.getXform().setPosition(cellWC[0], cellWC[1]);
+};
+
+/**
+ * Gets the world coordinate position of the cell at the specified world coordinate position.
+ * @param {vec2} wc - The world coordinate
+ * @returns {vec2} position of the cell to world coordinate.
+ */
+Grid.prototype.cellToWorld = function (wc) {
+    var positionInGrid = this._getIndexFromWC(wc);
+    return this.mGridArray[positionInGrid[0]][positionInGrid[1]].cellToWorld();
+};
+
+/**
+ * Converts a world coordinate position into a cell index coordinate.
+ * @param {vec2} wc - World position to convert.
+ * @returns {Array|int} Index coordinate of the cell.
+ */
+Grid.prototype.worldToCell = function (wc) {
+    return this._getIndexFromWC(wc);
 };
 
 /**
@@ -263,4 +269,22 @@ Grid.prototype.cellToWorld = function (worldPosition) {
  */
 Grid.prototype.getXform = function () {
     return this.mXform;
+};
+
+// Private Methods
+Grid.prototype._getIndexFromWC = function (wc) {
+    var localizedX = wc[0] - ((this.getXform().getXPos()) - ((this.getGridLength() * this.getCellWidth()) / 2));
+    var localizedY =  + wc[1] - (this.getXform().getYPos() - ((this.getGridHeight() * this.getCellHeight()) / 2));
+    
+    // Checks if point is within the grid
+    if (localizedX < 0 || localizedX > this.getGridLength() * this.getCellWidth() ||
+        localizedY < 0 || localizedY > this.getGridHeight() * this.getCellHeight()) {
+        console.log("out of bounds");
+        return;
+    }
+    
+    var xIndex = Math.floor(localizedX / this.getCellWidth());
+    var yIndex = Math.floor(localizedY / this.getCellHeight());
+    
+    return [xIndex, yIndex];
 };

@@ -104,7 +104,7 @@ Cell.prototype.setCellHeight = function (height) {
 };
 
 /**
- * 
+ * Gets the cells world position
  * @returns {vec2} World position of the cell position
  */
 Cell.prototype.cellToWorld = function () {
@@ -117,8 +117,3 @@ Cell.prototype.cellToWorld = function () {
     var worldPos = vec2.fromValues(xPos, yPos);
     return worldPos;
 };
-
-Cell.prototype.worldToCell = function () {
-    
-};
-
