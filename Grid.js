@@ -3,7 +3,7 @@
  */
 
 /*jslint node: true, vars: true */
-/*global gEngine: false, SimpleShader: false, Renderable: false, mat4: false, vec3: false */
+/*global gEngine: false, SimpleShader: false, Renderable: false, mat4: false, vec3: false, vec2: false */
 /* find out more about jslint: http://www.jslint.com/help.html */
 "use strict";
 
@@ -26,9 +26,9 @@ function Grid(gridLength, gridHeight, cellWidth, cellHeight) {
     
     this.mGridMap = null;
     
+    // Debug Draw Lines
     this.mGridLineThickness = 1;
     this.mDrawLines = false;
-    
     this.mGridLinesX = [];
     this.mGridLinesY = [];
 
@@ -66,16 +66,18 @@ Grid.prototype.initialize = function (gridLength, gridHeight, cellWidth, cellHei
     this.setGridHeight(gridHeight);
     this.setCellWidth(cellWidth);
     this.setCellHeight(cellHeight);
+    
+    this.mGridArray = [];
 
     for (var i = 0; i < this.mGridLength; i++) {
         var yArray = [];
         for (var j = 0; j < this.mGridHeight; j++) {
-            yArray[j] = new Cell(i, j, this.mCellWidth, this.mCellHeight);
+            yArray[j] = new Cell(i, j, this.mCellWidth, this.mCellHeight, this);
         }
         this.mGridArray.push(yArray);
     }
     
-    this.updateLines();
+    this._updateLines();
 };
 
 /**
@@ -83,17 +85,17 @@ Grid.prototype.initialize = function (gridLength, gridHeight, cellWidth, cellHei
  * @returns {void}
  */
 Grid.prototype.update = function () {
-    this.updateLines();
+    this._updateLines();
 };
 
 /**
  * Draws the grid and its state.
- * @param {mat4} vpMatrix - Viewport Matrix
+ * @param {Camera} aCamera - Camera to draw to.
  * @returns {void}
  */
-Grid.prototype.draw = function (vpMatrix) {
+Grid.prototype.draw = function (aCamera) {
     if (this.mDrawLines) {
-        this.drawLines(vpMatrix);
+        this.drawLines(aCamera);
     }
 };
 
@@ -101,7 +103,7 @@ Grid.prototype.draw = function (vpMatrix) {
  * Helper function for updating the grid line state.
  * @returns {void}
  */
-Grid.prototype.updateLines = function () {
+Grid.prototype._updateLines = function () {
     var totalGridWidth = this.mGridLength * this.mCellWidth;
     var totalGridHeight = this.mGridHeight * this.mCellHeight;
     var startXPos = this.mXform.getXPos() - (totalGridWidth / 2);
@@ -126,16 +128,16 @@ Grid.prototype.updateLines = function () {
 
 /**
  * Draws the lines for the grid.
- * @param {mat4} vpMatrix - Viewport Matrix
+ * @param {Camera} aCamera - Camera to draw to.
  * @returns {void}
  */
-Grid.prototype.drawLines = function (vpMatrix) {
+Grid.prototype.drawLines = function (aCamera) {
     for (var i = 0; i < this.mGridLinesX.length; i++) {
-        this.mGridLinesX[i].draw(vpMatrix);
+        this.mGridLinesX[i].draw(aCamera);
     }
     
     for (var j = 0; j < this.mGridLinesY.length; j++) {
-        this.mGridLinesY[j].draw(vpMatrix);
+        this.mGridLinesY[j].draw(aCamera);
     }
 };
 
@@ -164,6 +166,12 @@ Grid.prototype.setGridLineThickness = function (thickness) {
  */
 Grid.prototype.setCellWidth = function (width) {
     this.mCellWidth = width;
+    
+    for (var i = 0; i < this.mGridArray.length; i++) {
+        for (var j = 0; j < this.mGridArray[i].length; j++) {
+            this.mGridArray[i][j].setCellWidth(this.mCellWidth);
+        }
+    }
 };
 
 /**
@@ -181,6 +189,12 @@ Grid.prototype.getCellWidth = function () {
  */
 Grid.prototype.setCellHeight = function (height) {
     this.mCellHeight = height;
+    
+    for (var i = 0; i < this.mGridArray.length; i++) {
+        for (var j = 0; j < this.mGridArray[i].length; j++) {
+            this.mGridArray[i][j].setCellHeight(this.mCellHeight);
+        }
+    }
 };
 
 /**
@@ -226,33 +240,46 @@ Grid.prototype.getGridHeight = function () {
 };
 
 /**
- * Sets the object at the specified cell coordinate.
+ * Sets the object at the specified cell position.
  * @param {int} x - The x-coordinate.
  * @param {int} y - The y-coordinate.
  * @param {Object} obj - The object you want to put into the grid cell.
  * @returns {void}
  */
 Grid.prototype.setObjectAt = function (x, y, obj) {
+    var wc = vec2.fromValues(x, y);
+    var cellWC = this.cellToWorld(wc);
     
+    if (cellWC === null || cellWC === undefined
+            || obj === null || obj === undefined) {
+        return;
+    }
+    
+    obj.getXform().setPosition(cellWC[0], cellWC[1]);
 };
 
 /**
- * Gets the object at the specified cell coordinate.
- * @param {int} x - The x-coordinate.
- * @param {int} y - The y-coordinate.
- * @returns {Object} The object at the specified cell coordinate.
+ * Gets the world coordinate position of the cell at the specified world coordinate position.
+ * @param {vec2} wc - The world coordinate
+ * @returns {vec2} position of the cell to world coordinate.
  */
-Grid.prototype.getObjectAt = function (x, y) {
+Grid.prototype.cellToWorld = function (wc) {
+    var positionInGrid = this._getIndexFromWC(wc);
     
+    if (positionInGrid === null || positionInGrid === undefined) {
+        return;
+    }
+    
+    return this.mGridArray[positionInGrid[0]][positionInGrid[1]].cellToWorld();
 };
 
 /**
- * Will look through the grid to see if a specified object exists.
- * @param {Object} obj - The object to check for.
- * @returns {boolean}
+ * Converts a world coordinate position into a cell index coordinate.
+ * @param {vec2} wc - World position to convert.
+ * @returns {Array|int} Index coordinate of the cell.
  */
-Grid.prototype.contains = function (obj) {
-    
+Grid.prototype.worldToCell = function (wc) {
+    return this._getIndexFromWC(wc);
 };
 
 /**
@@ -261,4 +288,22 @@ Grid.prototype.contains = function (obj) {
  */
 Grid.prototype.getXform = function () {
     return this.mXform;
+};
+
+// Private Methods
+Grid.prototype._getIndexFromWC = function (wc) {
+    var localizedX = wc[0] - ((this.getXform().getXPos()) - ((this.getGridLength() * this.getCellWidth()) / 2));
+    var localizedY =  + wc[1] - (this.getXform().getYPos() - ((this.getGridHeight() * this.getCellHeight()) / 2));
+    
+    // Checks if point is within the grid
+    if (localizedX < 0 || localizedX > this.getGridLength() * this.getCellWidth() ||
+        localizedY < 0 || localizedY > this.getGridHeight() * this.getCellHeight()) {
+        console.log("out of bounds");
+        return;
+    }
+    
+    var xIndex = Math.floor(localizedX / this.getCellWidth());
+    var yIndex = Math.floor(localizedY / this.getCellHeight());
+    
+    return [xIndex, yIndex];
 };
