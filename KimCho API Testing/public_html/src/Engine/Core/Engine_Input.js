@@ -87,6 +87,9 @@ gEngine.Input = (function () {
     var mIsButtonClicked = [];
     var mMousePosX = -1;
     var mMousePosY = -1;
+    
+    var mScrollprev = 0;
+    var mScrollAmount = 0;
 
     // <editor-fold desc="Event handler functions">
     //<editor-fold desc="Keyboard handlers">
@@ -127,6 +130,10 @@ gEngine.Input = (function () {
     };
     //</editor-fold>
     //</editor-fold>
+    
+    var _onMouseWheel = function (event) {
+        mScrollAmount = event.deltaY;
+    };
 
     var initialize = function (canvasID) {
         //<editor-fold desc="Keyboard support">
@@ -150,6 +157,7 @@ gEngine.Input = (function () {
         window.addEventListener('mousedown', _onMouseDown);
         window.addEventListener('mouseup', _onMouseUp);
         window.addEventListener('mousemove', _onMouseMove);
+        window.addEventListener('wheel', _onMouseWheel);
         mCanvas = document.getElementById(canvasID);
         //</editor-fold>
     };
@@ -163,6 +171,12 @@ gEngine.Input = (function () {
         for (i = 0; i < 3; i++) {
             mIsButtonClicked[i] = (!mButtonPreviousState[i]) && mIsButtonPressed[i];
             mButtonPreviousState[i] = mIsButtonPressed[i];
+        }
+        
+        if (mScrollprev !== mScrollAmount) {
+            mScrollprev = mScrollAmount;
+        } else {
+            mScrollAmount = 0;
         }
     };
 
@@ -182,8 +196,15 @@ gEngine.Input = (function () {
     var isButtonClicked = function (button) {
         return mIsButtonClicked[button];
     };
+    
+    var isScrolled = function () {
+        return mScrollAmount !== 0;
+    };
+    
     var getMousePosX = function () { return mMousePosX; };
     var getMousePosY = function () { return mMousePosY; };
+    
+    var getScrollAmount = function () { return mScrollAmount; };
 
     var mPublic = {
         initialize: initialize,
@@ -199,7 +220,9 @@ gEngine.Input = (function () {
         isButtonClicked: isButtonClicked,
         getMousePosX: getMousePosX,       // invalid if no corresponding buttonPressed or buttonClicked
         getMousePosY: getMousePosY,
-        mouseButton: kMouseButton
+        mouseButton: kMouseButton,
+        getScrollAmount: getScrollAmount,
+        isScrolled: isScrolled
     };
     return mPublic;
 }());

@@ -32,11 +32,11 @@ MyGame.prototype.initialize = function () {
     this.mCamera = new Camera(
             vec2.fromValues(0, 0), // position of the camera
             10, // width of camera
-            [0, 0, 600, 600]           // viewport (orgX, orgY, width, height)
+            [0, 0, 800, 800]           // viewport (orgX, orgY, width, height)
             );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
 
-    this.mTileMap = new TileMap(10, 10, 1, 1);
+    this.mTileMap = new TileMap(100, 100, 1, 1);
     this.mTileMap.getXform().setPosition(0, 0);
     this.mTileMap.setGridLineThickness(0.05);
 };
@@ -54,6 +54,7 @@ MyGame.prototype.update = function () {
     this.handleInput();
     this.mTileMap.update();
     this.mTileMap.setDrawLines(true);
+    this.mCamera.update();
     //console.log(this.mGrid.cellToWorld(vec2.fromValues(0, 0)));
 };
 
@@ -94,11 +95,14 @@ MyGame.prototype.handleInput = function () {
     if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Right)) {
         var x = this.mCamera.getWCCenter()[0] + (this.mMoveCameraOrigin[0] - this.mCamera.mouseWCX()) * 10;
         var y = this.mCamera.getWCCenter()[1] + (this.mMoveCameraOrigin[1] - this.mCamera.mouseWCY()) * 10;
-
+        
         this.mCamera.setWCCenter(x, y);
-        this.mCamera.update();
-
-        this.mMoveCameraOrigin[0] = this.mCamera.mouseWCX();
-        this.mMoveCameraOrigin[1] = this.mCamera.mouseWCY();
+        //this.mMoveCameraOrigin[0] = this.mCamera.mouseWCX();
+        //this.mMoveCameraOrigin[1] = this.mCamera.mouseWCY();
+    }
+    
+    if (gEngine.Input.isScrolled()) {
+        var deltaY = gEngine.Input.getScrollAmount() / 10;
+        this.mCamera.setWCWidth(this.mCamera.getWCWidth() + deltaY);
     }
 };
