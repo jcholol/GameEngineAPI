@@ -1,0 +1,14 @@
+{
+  "name": "kimchogridapi",
+  "version": "1.0.0",
+  "description": "Grid API Test with multiple different Games",
+  "main": "index.js",
+  "scripts": {
+      "start": "node index.js"
+  },
+  "author": "David Kim & Jonathan Cho",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
