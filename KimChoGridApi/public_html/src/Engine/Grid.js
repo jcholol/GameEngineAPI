@@ -68,7 +68,9 @@ Grid.prototype.initialize = function (gridLength, gridHeight, cellWidth, cellHei
     this.setCellHeight(cellHeight);
     
     this.mGridArray = [];
-
+    this.mGridLinesX = [];
+    this.mGridLinesY = [];
+    
     for (var i = 0; i < this.mGridLength; i++) {
         var yArray = [];
         for (var j = 0; j < this.mGridHeight; j++) {
@@ -290,6 +292,22 @@ Grid.prototype.getXform = function () {
     return this.mXform;
 };
 
+Grid.prototype.resize = function (gridLength, gridHeight, cellWidth, cellHeight) {
+    if (cellWidth === null || cellWidth === undefined) {
+        cellWidth = 1;
+    }
+    if (cellHeight === null || cellHeight === undefined) {
+        cellHeight = 1;
+    }
+    
+    if (this.mGridLength !== gridLength || this.mGridHeight !== gridHeight) {
+        this.initialize(gridLength, gridHeight, cellWidth, cellHeight);
+    } else if (this.mCellWidth !== cellWidth || this.mCellHeight !== cellHeight) {
+        this.setCellWidth(cellWidth);
+        this.setCellHeight(cellHeight);
+    }
+};
+
 // Private Methods
 Grid.prototype._getIndexFromWC = function (wc) {
     var localizedX = wc[0] - ((this.getXform().getXPos()) - ((this.getGridLength() * this.getCellWidth()) / 2));
@@ -298,7 +316,7 @@ Grid.prototype._getIndexFromWC = function (wc) {
     // Checks if point is within the grid
     if (localizedX < 0 || localizedX > this.getGridLength() * this.getCellWidth() ||
         localizedY < 0 || localizedY > this.getGridHeight() * this.getCellHeight()) {
-        console.log("out of bounds");
+        //console.log("out of bounds");
         return;
     }
     

@@ -64,7 +64,7 @@ Tile.prototype.setCellHeight = function (height) {
  */
 Tile.prototype.setRenderable = function (renderable) {
     this.mRenderable = renderable;
-    console.log(this.mRenderable);
+    //console.log(this.mRenderable);
 };
 
 /**

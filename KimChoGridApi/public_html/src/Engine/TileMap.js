@@ -51,6 +51,8 @@ TileMap.prototype.initialize = function (gridLength, gridHeight, cellWidth, cell
     this.setCellHeight(cellHeight);
     
     this.mGridArray = [];
+    this.mGridLinesX = [];
+    this.mGridLinesY = [];
 
     for (var i = 0; i < this.mGridLength; i++) {
         var yArray = [];
@@ -91,5 +93,10 @@ TileMap.prototype.setObjectAt = function (x, y, obj) {
 TileMap.prototype.tileHasRenderable = function (x, y) {
     var wc = vec2.fromValues(x, y);
     var position = this._getIndexFromWC(wc);
+    
+    if (position === null || position === undefined) {
+        return;
+    }
+    
     return this.mGridArray[position[0]][position[1]].hasRenderable();
 };

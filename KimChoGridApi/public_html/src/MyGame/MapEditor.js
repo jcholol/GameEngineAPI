@@ -11,37 +11,44 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function MyGame() {
-    // The camera to view the scene
+function MapEditor() {
+    gEngine.Core.initializeEngineCore('GLCanvas', this);
+    
+    this.mInputGridWidth = null;
+    this.mInputGridHeight = null;
+    
     this.mCamera = null;
     this.mGrid = null;
     this.mTileMap = null;
 
     this.mMoveCameraOrigin = [0, 0];
 }
-gEngine.Core.inheritPrototype(MyGame, Scene);
+gEngine.Core.inheritPrototype(MapEditor, Scene);
 
-MyGame.prototype.loadScene = function () {
+MapEditor.prototype.loadScene = function () {
 };
 
-MyGame.prototype.unloadScene = function () {
+MapEditor.prototype.unloadScene = function () {
 };
 
-MyGame.prototype.initialize = function () {
+MapEditor.prototype.initialize = function () {
     // Step A: set up the cameras
     this.mCamera = new Camera(
             vec2.fromValues(0, 0), // position of the camera
             10, // width of camera
-            [0, 0, 800, 800]           // viewport (orgX, orgY, width, height)
+            [0, 0, 600, 600]           // viewport (orgX, orgY, width, height)
             );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
+    
+    this.mInputGridWidth = document.getElementById('GridWidth');
+    this.mInputGridHeight = document.getElementById('GridHeight');
 
-    this.mTileMap = new TileMap(100, 100, 1, 1);
+    this.mTileMap = new TileMap(10, 10, 1, 1);
     this.mTileMap.getXform().setPosition(0, 0);
     this.mTileMap.setGridLineThickness(0.05);
 };
 
-MyGame.prototype.draw = function () {
+MapEditor.prototype.draw = function () {
     // Step A: clear the canvas
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
@@ -50,15 +57,16 @@ MyGame.prototype.draw = function () {
     this.mTileMap.draw(this.mCamera);
 };
 
-MyGame.prototype.update = function () {
+MapEditor.prototype.update = function () {
     this.handleInput();
     this.mTileMap.update();
     this.mTileMap.setDrawLines(true);
     this.mCamera.update();
-    //console.log(this.mGrid.cellToWorld(vec2.fromValues(0, 0)));
+    
+    this.mTileMap.resize(this.mInputGridWidth.value, this.mInputGridHeight.value, 1, 1);
 };
 
-MyGame.prototype.handleInput = function () {
+MapEditor.prototype.handleInput = function () {
     var xDelta = 0.05;
 
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.A)) {
