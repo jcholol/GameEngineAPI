@@ -1,5 +1,5 @@
 /*
- * File: MyGame.js 
+ * File: MapEditor.js 
  * This is the logic of our game. 
  */
 
