@@ -91,3 +91,15 @@ Tile.prototype._adjustRenderablePosition = function () {
         this.mRenderable.getXform().setPosition(cellWC[0], cellWC[1]);
     }
 };
+
+Tile.prototype.toJSON = function () {
+    var json = {
+        cellWidth: this.mCellWidth,
+        cellHeight: this.mCellHeight,
+        cellXPos: this.mCellGridXPos,
+        cellYPos: this.mCellGridYPos,
+        renderable: this.mRenderable
+    };
+    
+    return json;
+};
