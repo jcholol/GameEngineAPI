@@ -16,7 +16,11 @@ function MapEditor() {
 
     this.mInputGridWidth = null;
     this.mInputGridHeight = null;
-
+    this.mInputRenderableRed = null;
+    this.mInputRenderableGreen = null;
+    this.mInputRenderableBlue = null;
+    this.mInputRenderableAlpha = null;
+    
     this.mCamera = null;
     this.mGrid = null;
     this.mTileMap = null;
@@ -42,6 +46,10 @@ MapEditor.prototype.initialize = function () {
 
     this.mInputGridWidth = document.getElementById('GridWidth');
     this.mInputGridHeight = document.getElementById('GridHeight');
+    this.mInputRenderableRed = document.getElementById('RenderableRed');
+    this.mInputRenderableGreen = document.getElementById('RenderableGreen');
+    this.mInputRenderableBlue = document.getElementById('RenderableBlue');
+    this.mInputRenderableAlpha = document.getElementById('RenderableAlpha');
 
     this.mTileMap = new TileMap(10, 10, 1, 1);
     this.mTileMap.getXform().setPosition(0, 0);
@@ -92,6 +100,7 @@ MapEditor.prototype.handleInput = function () {
     if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Left)) {
         if (!this.mTileMap.tileHasRenderable(this.mCamera.mouseWCX(), this.mCamera.mouseWCY())) {
             var temp = new Renderable();
+            temp.setColor([this.mInputRenderableRed.value, this.mInputRenderableGreen.value, this.mInputRenderableBlue.value, this.mInputRenderableAlpha.value]);
             this.mTileMap.setObjectAt(this.mCamera.mouseWCX(), this.mCamera.mouseWCY(), temp);
         }
     }
