@@ -85,6 +85,19 @@ TileMap.prototype.setObjectAt = function (x, y, obj) {
 };
 
 /**
+ * Removes the object at the specified cell position.
+ * @param {int} x - The x-coordinate.
+ * @param {int} y - The y-coordinate.
+ * @returns {void}
+ */
+TileMap.prototype.removeObjectAt = function (x, y) {
+    var wc = vec2.fromValues(x, y);    
+    var cellIndex = this._getIndexFromWC(wc);
+
+    this.mGridArray[cellIndex[0]][cellIndex[1]].removeRenderable();
+};
+
+/**
  * This method will check to see if a renderable exists in a tile.
  * @param {float} x - World coordinate x position
  * @param {float} y - World coordinate y position

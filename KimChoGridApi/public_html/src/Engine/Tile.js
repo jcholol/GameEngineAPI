@@ -68,6 +68,14 @@ Tile.prototype.setRenderable = function (renderable) {
 };
 
 /**
+ * This method will remove a reference to the tile to a specified renderable.
+ * @returns {null}
+ */
+Tile.prototype.removeRenderable = function () {
+    this.mRenderable = null;
+};
+
+/**
  * Checks to see if the current tile has a reference to a renderable.
  * @returns {Boolean}
  */
