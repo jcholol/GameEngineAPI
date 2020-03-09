@@ -69,7 +69,14 @@ TileMap.prototype.initializeFromJSON = function (jsonString) {
     var json = JSON.parse(jsonString);
     var length = json.GridLength;
     var height = json.GridHeight;
+    var cellWidth = json.CellWidth;
+    var cellHeight = json.CellHeight;
     var gridArray = json.GridArray;
+    
+    this.setGridLength(length);
+    this.setGridHeight(height);
+    this.setCellWidth(cellWidth);
+    this.setCellHeight(cellHeight);
 
     this.mGridArray = [];
     this.mGridLinesX = [];
@@ -81,8 +88,13 @@ TileMap.prototype.initializeFromJSON = function (jsonString) {
             yArray[j] = new Tile(gridArray[i][j].cellXPos, gridArray[i][j].cellYPos, gridArray[i][j].cellWidth, gridArray[i][j].cellHeight, this);
             if (gridArray[i][j].renderable !== null && gridArray[i][j].renderable !== undefined) {
                 var tempRenderable = new Renderable();
-                tempRenderable.setColor(gridArray[i][j].renderable.mColor);
+                if (gridArray[i][j].renderable.mTexture !== null && gridArray[i][j].renderable.mTexture !== undefined) {
+                    tempRenderable = new TextureRenderable(gridArray[i][j].renderable.mTexture);
+                } else {
+                    tempRenderable.setColor(gridArray[i][j].renderable.mColor);
+                }
                 tempRenderable.getXform().setPosition(gridArray[i][j].renderable.mXform.mPosition[0], gridArray[i][j].renderable.mXform.mPosition[1]);
+                
                 yArray[j].setRenderable(tempRenderable);
             }
         }
@@ -183,6 +195,8 @@ TileMap.prototype.exportToJSON = function () {
     var jsonObj = {
         "GridLength": this.mGridLength,
         "GridHeight": this.mGridHeight,
+        "CellWidth": this.mCellWidth,
+        "CellHeight": this.mCellHeight,
         "GridArray": this.mGridArray
     };
 
@@ -195,10 +209,10 @@ TileMap.prototype.resizeHelper = function (gridLength, gridHeight, cellWidth, ce
     this.setGridHeight(gridHeight);
     this.setCellWidth(cellWidth);
     this.setCellHeight(cellHeight);
-    
+
     this.mGridLinesX = [];
     this.mGridLinesY = [];
-    
+
     var newArray = [];
 
     for (var i = 0; i < gridLength; i++) {
@@ -214,8 +228,8 @@ TileMap.prototype.resizeHelper = function (gridLength, gridHeight, cellWidth, ce
         }
         newArray.push(yArray);
     }
-    
+
     this.mGridArray = newArray;
-    
+
     this._updateLines();
 };

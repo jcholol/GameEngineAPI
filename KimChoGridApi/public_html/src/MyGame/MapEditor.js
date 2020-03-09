@@ -20,6 +20,7 @@ function MapEditor() {
     this.mInputRenderableGreen = null;
     this.mInputRenderableBlue = null;
     this.mInputRenderableAlpha = null;
+    this.mInputSprite = null;
 
     this.mDownloadButton = null;
     this.mLoadFromJSONButton = null;
@@ -28,6 +29,9 @@ function MapEditor() {
     this.mCamera = null;
     this.mGrid = null;
     this.mTileMap = null;
+    
+    // Sprite File Container
+    this.kSprites = [];
 
     this.mMoveCameraOrigin = [0, 0];
 }
@@ -35,9 +39,23 @@ gEngine.Core.inheritPrototype(MapEditor, Scene);
 
 MapEditor.prototype.loadScene = function () {
     gEngine.TextFileLoader.loadTextFile(this.kJSON);
+    
+    for (var i = 0; i <= 89; i++) {
+        var kName = "assets/bomberman/backyard_" + i + ".png";
+        this.kSprites[i] = kName;
+    }
+    
+    for (var i = 0; i < this.kSprites.length; i++) {
+        gEngine.Textures.loadTexture(this.kSprites[i]);
+    }
 };
 
 MapEditor.prototype.unloadScene = function () {
+    gEngine.TextFileLoader.unloadTextFile(this.kJSON);
+    
+    for (var i = 0; i < this.kSprites.length; i++) {
+        gEngine.Textures.unloadTexture(this.kSprites[i]);
+    }
 };
 
 MapEditor.prototype.initialize = function () {
@@ -55,6 +73,7 @@ MapEditor.prototype.initialize = function () {
     this.mInputRenderableGreen = document.getElementById('RenderableGreen');
     this.mInputRenderableBlue = document.getElementById('RenderableBlue');
     this.mInputRenderableAlpha = document.getElementById('RenderableAlpha');
+    this.mInputSprite = document.getElementById("Sprite");
 
     this.mDownloadButton = document.getElementById("DownloadButton");
     this.mDownloadButton.onclick = () => {
@@ -114,8 +133,17 @@ MapEditor.prototype.handleInput = function () {
 
     if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Left)) {
         if (!this.mTileMap.tileHasRenderable(this.mCamera.mouseWCX(), this.mCamera.mouseWCY())) {
-            var temp = new Renderable();
-            temp.setColor([this.mInputRenderableRed.value / 255, this.mInputRenderableGreen.value / 255, this.mInputRenderableBlue.value / 255, this.mInputRenderableAlpha.value / 100]);
+            var temp = null;
+            if (this.mInputSprite.value - 1 < 0) {
+                var temp = new Renderable();
+                temp.setColor([this.mInputRenderableRed.value / 255, this.mInputRenderableGreen.value / 255, this.mInputRenderableBlue.value / 255, this.mInputRenderableAlpha.value / 100]);
+            } else {
+                if (this.mInputSprite.value > 89) {
+                    var temp = new TextureRenderable(this.kSprites[89]);
+                } else {
+                    var temp = new TextureRenderable(this.kSprites[this.mInputSprite.value]);
+                }
+            }
             this.mTileMap.setObjectAtWC(this.mCamera.mouseWCX(), this.mCamera.mouseWCY(), temp);
         }
     }

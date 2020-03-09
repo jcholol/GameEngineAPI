@@ -16,29 +16,37 @@ function BomberMan() {
 
    this.mCamera = null;
    this.mTileMap = null;
+   this.mGrid = null;
    
    this.mHero = null;
-
-   // Assets
-   this.kTile0 = "assets/bomberman/backyard_00.png";
-   this.kTile1 = "assets/bomberman/backyard_01.png";
-   this.kTile2 = "assets/bomberman/backyard_02.png";
-   this.kTile3 = "assets/bomberman/backyard_03.png";
+   
+   // TileMap File
+   this.kJSON = "assets/data.json";
+   
+   // Sprite File Container
+    this.kSprites = [];
 }
 gEngine.Core.inheritPrototype(BomberMan, Scene);
 
 BomberMan.prototype.loadScene = function () {
-   gEngine.Textures.loadTexture(this.kTile0);
-   gEngine.Textures.loadTexture(this.kTile1);
-   gEngine.Textures.loadTexture(this.kTile2);
-   gEngine.Textures.loadTexture(this.kTile3);
+    gEngine.TextFileLoader.loadTextFile(this.kJSON);
+    
+    for (var i = 0; i <= 89; i++) {
+        var kName = "assets/bomberman/backyard_" + i + ".png";
+        this.kSprites[i] = kName;
+    }
+    
+    for (var i = 0; i < this.kSprites.length; i++) {
+        gEngine.Textures.loadTexture(this.kSprites[i]);
+    }
 };
 
 BomberMan.prototype.unloadScene = function () {
-   gEngine.Textures.unloadTexture(this.kTile0);
-   gEngine.Textures.unloadTexture(this.kTile1);
-   gEngine.Textures.unloadTexture(this.kTile2);
-   gEngine.Textures.unloadTexture(this.kTile3);
+    gEngine.TextFileLoader.unloadTextFile(this.kJSON);
+    
+    for (var i = 0; i < this.kSprites.length; i++) {
+        gEngine.Textures.unloadTexture(this.kSprites[i]);
+    }
 };
 
 BomberMan.prototype.initialize = function () {
@@ -63,11 +71,7 @@ BomberMan.prototype.initializeHero = function () {
 };
 
 BomberMan.prototype.initializeMap = function () {
-    for (var i = 0; i < this.mTileMap.getGridLength(); i++) {
-        for (var j = 0; j < this.mTileMap.getGridHeight(); j++) {
-            this.mTileMap.setObjectAtIndex(i, j, new TextureRenderable(this.kTile3));
-        }
-    }
+    this.mTileMap.initializeFromJSON(gEngine.ResourceMap.retrieveAsset(this.kJSON));
 };
 
 BomberMan.prototype.draw = function () {
@@ -87,7 +91,9 @@ BomberMan.prototype.update = function () {
 };
 
 BomberMan.prototype.handleInput = function () {
-    
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.A)) {
+        
+    }
 };
 
 
