@@ -101,7 +101,7 @@ MapEditor.prototype.handleInput = function () {
         if (!this.mTileMap.tileHasRenderable(this.mCamera.mouseWCX(), this.mCamera.mouseWCY())) {
             var temp = new Renderable();
             temp.setColor([this.mInputRenderableRed.value, this.mInputRenderableGreen.value, this.mInputRenderableBlue.value, this.mInputRenderableAlpha.value]);
-            this.mTileMap.setObjectAtIndex(this.mCamera.mouseWCX(), this.mCamera.mouseWCY(), temp);
+            this.mTileMap.setObjectAtWC(this.mCamera.mouseWCX(), this.mCamera.mouseWCY(), temp);
         }
     }
     if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Right)) {

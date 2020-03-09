@@ -19,9 +19,7 @@ function BomberMan() {
 
    // Assets
    this.kTile0 = "assets/bomberman/backyard_00.png";
-
-   // GameObjects
-   this.mTile0 = null;
+   this.kTile1 = "assets/bomberman/backyard_01.png";
 }
 gEngine.Core.inheritPrototype(BomberMan, Scene);
 
@@ -45,10 +43,14 @@ BomberMan.prototype.initialize = function () {
    this.mTileMap = new TileMap(10, 10, 1, 1);
    this.mTileMap.setDrawLines(true);
    this.mTileMap.setGridLineThickness(0.05);
+};
 
-   this.mTile0 = new TextureRenderable(this.kTile0);
-   
-   this.mTileMap.setObjectAtIndex(0, 0, this.mTile0);
+BomberMan.prototype.initializeMap = function () {
+    for (var i = 0; i < this.mTileMap.length; i++) {
+        for (var j = 0; j < this.mTileMap[i].length; j++) {
+            
+        }
+    }
 };
 
 BomberMan.prototype.draw = function () {
@@ -58,7 +60,6 @@ BomberMan.prototype.draw = function () {
    this.mCamera.setupViewProjection();
 
    this.mTileMap.draw(this.mCamera);
-   this.mTile0.draw(this.mCamera);
 };
 
 BomberMan.prototype.update = function () {
@@ -67,6 +68,7 @@ BomberMan.prototype.update = function () {
 };
 
 BomberMan.prototype.handleInput = function () {
+    
 };
 
 
