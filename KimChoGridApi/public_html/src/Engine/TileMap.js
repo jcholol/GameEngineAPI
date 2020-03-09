@@ -28,11 +28,11 @@ gEngine.Core.inheritPrototype(TileMap, Grid);
  */
 TileMap.prototype.draw = function (aCamera) {
     Grid.prototype.draw.call(this, aCamera);
-    
+
     this.mGridArray.forEach(grid => {
-       grid.forEach(tile => {
-           tile.draw(aCamera);
-       }); 
+        grid.forEach(tile => {
+            tile.draw(aCamera);
+        });
     });
 };
 
@@ -49,7 +49,7 @@ TileMap.prototype.initialize = function (gridLength, gridHeight, cellWidth, cell
     this.setGridHeight(gridHeight);
     this.setCellWidth(cellWidth);
     this.setCellHeight(cellHeight);
-    
+
     this.mGridArray = [];
     this.mGridLinesX = [];
     this.mGridLinesY = [];
@@ -61,7 +61,34 @@ TileMap.prototype.initialize = function (gridLength, gridHeight, cellWidth, cell
         }
         this.mGridArray.push(yArray);
     }
-    
+
+    this._updateLines();
+};
+
+TileMap.prototype.initializeFromJSON = function (jsonString) {
+    var json = JSON.parse(jsonString);
+    var length = json.GridLength;
+    var height = json.GridHeight;
+    var gridArray = json.GridArray;
+
+    this.mGridArray = [];
+    this.mGridLinesX = [];
+    this.mGridLinesY = [];
+
+    for (var i = 0; i < length; i++) {
+        var yArray = [];
+        for (var j = 0; j < height; j++) {
+            yArray[j] = new Tile(gridArray[i][j].cellXPos, gridArray[i][j].cellYPos, gridArray[i][j].cellWidth, gridArray[i][j].cellHeight, this);
+            if (gridArray[i][j].renderable !== null && gridArray[i][j].renderable !== undefined) {
+                var tempRenderable = new Renderable();
+                tempRenderable.setColor(gridArray[i][j].renderable.mColor);
+                tempRenderable.getXform().setPosition(gridArray[i][j].renderable.mXform.mPosition[0], gridArray[i][j].renderable.mXform.mPosition[1]);
+                yArray[j].setRenderable(tempRenderable);
+            }
+        }
+        this.mGridArray.push(yArray);
+    }
+
     this._updateLines();
 };
 
@@ -76,11 +103,11 @@ TileMap.prototype.setObjectAtWC = function (x, y, obj) {
     Grid.prototype.setObjectAtWC.call(this, x, y, obj);
     var wc = vec2.fromValues(x, y);
     var cellIndex = this._getIndexFromWC(wc);
-    
+
     if (cellIndex === null || cellIndex === undefined) {
         return;
     }
-    
+
     this.mGridArray[cellIndex[0]][cellIndex[1]].setRenderable(obj);
 };
 
@@ -103,7 +130,7 @@ TileMap.prototype.setObjectAtIndex = function (x, y, obj) {
  * @returns {void}
  */
 TileMap.prototype.removeObjectAtWC = function (x, y) {
-    var wc = vec2.fromValues(x, y);    
+    var wc = vec2.fromValues(x, y);
     var cellIndex = this._getIndexFromWC(wc);
 
     this.mGridArray[cellIndex[0]][cellIndex[1]].removeRenderable();
@@ -128,10 +155,67 @@ TileMap.prototype.removeObjectAtIndex = function (x, y) {
 TileMap.prototype.tileHasRenderable = function (x, y) {
     var wc = vec2.fromValues(x, y);
     var position = this._getIndexFromWC(wc);
-    
+
     if (position === null || position === undefined) {
         return;
     }
-    
+
     return this.mGridArray[position[0]][position[1]].hasRenderable();
+};
+
+TileMap.prototype.resize = function (gridLength, gridHeight, cellWidth, cellHeight) {
+    if (cellWidth === null || cellWidth === undefined) {
+        cellWidth = 1;
+    }
+    if (cellHeight === null || cellHeight === undefined) {
+        cellHeight = 1;
+    }
+
+    if (this.mGridLength !== gridLength || this.mGridHeight !== gridHeight) {
+        this.resizeHelper(gridLength, gridHeight, cellWidth, cellHeight);
+    } else if (this.mCellWidth !== cellWidth || this.mCellHeight !== cellHeight) {
+        this.setCellWidth(cellWidth);
+        this.setCellHeight(cellHeight);
+    }
+};
+
+TileMap.prototype.exportToJSON = function () {
+    var jsonObj = {
+        "GridLength": this.mGridLength,
+        "GridHeight": this.mGridHeight,
+        "GridArray": this.mGridArray
+    };
+
+    return jsonObj;
+};
+
+// Private Methods
+TileMap.prototype.resizeHelper = function (gridLength, gridHeight, cellWidth, cellHeight) {
+    this.setGridLength(gridLength);
+    this.setGridHeight(gridHeight);
+    this.setCellWidth(cellWidth);
+    this.setCellHeight(cellHeight);
+    
+    this.mGridLinesX = [];
+    this.mGridLinesY = [];
+    
+    var newArray = [];
+
+    for (var i = 0; i < gridLength; i++) {
+        var yArray = [];
+        for (var j = 0; j < gridHeight; j++) {
+            if (this.mGridArray[i] === null || this.mGridArray[i] === undefined) {
+                yArray[j] = new Tile(i, j, this.mCellWidth, this.mCellHeight, this);
+            } else if (this.mGridArray[i][j] === null || this.mGridArray[i][j] === undefined) {
+                yArray[j] = new Tile(i, j, this.mCellWidth, this.mCellHeight, this);
+            } else {
+                yArray[j] = this.mGridArray[i][j];
+            }
+        }
+        newArray.push(yArray);
+    }
+    
+    this.mGridArray = newArray;
+    
+    this._updateLines();
 };

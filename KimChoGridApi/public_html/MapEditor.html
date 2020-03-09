@@ -84,6 +84,8 @@
           ">
         <h1 id="GameTitle">Map Editor Demo</h1>
         <a href="index.html"><button>Back to Home</button></a>
+        <a id="DownloadButton"><button>Download Map as JSON</button></a>
+        <a id="LoadFromJSON"><button>LoadMapFromJSON</button></a>
         <br>
         <div>
             <div style="display: flex; flex-direction: row; justify-content: center;">
@@ -94,13 +96,13 @@
             </div> 
             <br>
             <div style="display: flex; flex-direction: row; justify-content: center;">
-                Red<input id="RenderableRed" type="number" min="0" max="1" value="1">
+                Red<input id="RenderableRed" type="number" min="0" max="255" value="255">
                 &nbsp
-                Green<input id="RenderableGreen" type="number" min="0" max="1" value="1">
+                Green<input id="RenderableGreen" type="number" min="0" max="255" value="255">
                 &nbsp
-                Blue<input id="RenderableBlue" type="number" min="0" max="1" value="1">
+                Blue<input id="RenderableBlue" type="number" min="0" max="255" value="255">
                 &nbsp
-                 Alpha<input id="RenderableAlpha" type="number" min="0" max="1" value="1">
+                 Alpha<input id="RenderableAlpha" type="number" min="0" max="100" value="100">
             </div>
             <hr>
             <canvas id="GLCanvas" width="600" height="600">

@@ -304,21 +304,7 @@ Grid.prototype.getXform = function () {
     return this.mXform;
 };
 
-Grid.prototype.resize = function (gridLength, gridHeight, cellWidth, cellHeight) {
-    if (cellWidth === null || cellWidth === undefined) {
-        cellWidth = 1;
-    }
-    if (cellHeight === null || cellHeight === undefined) {
-        cellHeight = 1;
-    }
-    
-    if (this.mGridLength !== gridLength || this.mGridHeight !== gridHeight) {
-        this.initialize(gridLength, gridHeight, cellWidth, cellHeight);
-    } else if (this.mCellWidth !== cellWidth || this.mCellHeight !== cellHeight) {
-        this.setCellWidth(cellWidth);
-        this.setCellHeight(cellHeight);
-    }
-};
+
 
 // Private Methods
 Grid.prototype._getIndexFromWC = function (wc) {

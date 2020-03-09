@@ -20,7 +20,11 @@ function MapEditor() {
     this.mInputRenderableGreen = null;
     this.mInputRenderableBlue = null;
     this.mInputRenderableAlpha = null;
-    
+
+    this.mDownloadButton = null;
+    this.mLoadFromJSONButton = null;
+    this.kJSON = "assets/data.json";
+
     this.mCamera = null;
     this.mGrid = null;
     this.mTileMap = null;
@@ -30,6 +34,7 @@ function MapEditor() {
 gEngine.Core.inheritPrototype(MapEditor, Scene);
 
 MapEditor.prototype.loadScene = function () {
+    gEngine.TextFileLoader.loadTextFile(this.kJSON);
 };
 
 MapEditor.prototype.unloadScene = function () {
@@ -50,6 +55,16 @@ MapEditor.prototype.initialize = function () {
     this.mInputRenderableGreen = document.getElementById('RenderableGreen');
     this.mInputRenderableBlue = document.getElementById('RenderableBlue');
     this.mInputRenderableAlpha = document.getElementById('RenderableAlpha');
+
+    this.mDownloadButton = document.getElementById("DownloadButton");
+    this.mDownloadButton.onclick = () => {
+        this.downloadMap(this.mDownloadButton);
+    };
+    
+    this.mLoadFromJSONButton = document.getElementById("LoadFromJSON");
+    this.mLoadFromJSONButton.onclick = () => {
+        this.loadFromJSON();
+    };
 
     this.mTileMap = new TileMap(10, 10, 1, 1);
     this.mTileMap.getXform().setPosition(0, 0);
@@ -100,7 +115,7 @@ MapEditor.prototype.handleInput = function () {
     if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Left)) {
         if (!this.mTileMap.tileHasRenderable(this.mCamera.mouseWCX(), this.mCamera.mouseWCY())) {
             var temp = new Renderable();
-            temp.setColor([this.mInputRenderableRed.value, this.mInputRenderableGreen.value, this.mInputRenderableBlue.value, this.mInputRenderableAlpha.value]);
+            temp.setColor([this.mInputRenderableRed.value / 255, this.mInputRenderableGreen.value / 255, this.mInputRenderableBlue.value / 255, this.mInputRenderableAlpha.value / 100]);
             this.mTileMap.setObjectAtWC(this.mCamera.mouseWCX(), this.mCamera.mouseWCY(), temp);
         }
     }
@@ -109,7 +124,7 @@ MapEditor.prototype.handleInput = function () {
             this.mTileMap.removeObjectAtWC(this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
         }
     }
-    
+
     if (gEngine.Input.isButtonClicked(gEngine.Input.mouseButton.Middle)) {
         this.mMoveCameraOrigin = [this.mCamera.mouseWCX(), this.mCamera.mouseWCY()];
     }
@@ -126,4 +141,21 @@ MapEditor.prototype.handleInput = function () {
         var deltaY = gEngine.Input.getScrollAmount() / 10;
         this.mCamera.setWCWidth(this.mCamera.getWCWidth() + deltaY);
     }
+};
+
+MapEditor.prototype.downloadMap = function () {
+    var jsonData = this.mTileMap.exportToJSON();
+
+    var cache = [];
+    let dataStr = JSON.stringify(jsonData);
+    
+    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+    let exportFileDefaultName = 'data.json';
+    this.mDownloadButton.setAttribute('href', dataUri);
+    this.mDownloadButton.setAttribute('download', exportFileDefaultName);
+};
+
+MapEditor.prototype.loadFromJSON = function () {
+    this.mTileMap.initializeFromJSON(gEngine.ResourceMap.retrieveAsset(this.kJSON));
 };

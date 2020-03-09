@@ -23,7 +23,7 @@ function Cell(x, y, width, height, gridParent) {
     this.mCellHeight = 1;
     this.mCellGridXPos = 0;
     this.mCellGridYPos = 0;
-    
+
     // Converts x and y if any of them are null or undefined
     if (x === null || x === undefined) {
         x = 0;
@@ -31,7 +31,7 @@ function Cell(x, y, width, height, gridParent) {
     if (y === null || y === undefined) {
         y = 0;
     }
-    
+
     // Converts width and height if any of them are null or undefined
     if (width === null || width === undefined) {
         width = 1;
@@ -39,10 +39,10 @@ function Cell(x, y, width, height, gridParent) {
     if (height === null || height === undefined) {
         height = 1;
     }
-    
+
     this.initialize(x, y, width, height);
 }
- 
+
 /**
  * Will initialize the cell.
  * @param {int} x - x-axis position in grid.
@@ -62,7 +62,7 @@ Cell.prototype.initialize = function (x, y, width, height) {
  * @returns {void}
  */
 Cell.prototype.update = function () {
-    
+
 };
 
 /**
@@ -113,7 +113,18 @@ Cell.prototype.cellToWorld = function () {
     var yOffset = (this.mGridParent.getGridHeight() * this.mGridParent.getCellHeight()) / 2;
     var xPos = (xForm.getXPos() - xOffset) + (this.mGridParent.getCellWidth() * this.mCellGridXPos) + (this.mGridParent.getCellWidth() / 2);
     var yPos = (xForm.getYPos() - yOffset) + (this.mGridParent.getCellHeight() * this.mCellGridYPos) + (this.mGridParent.getCellHeight() / 2);
-    
+
     var worldPos = vec2.fromValues(xPos, yPos);
     return worldPos;
+};
+
+Cell.prototype.toJSON = function () {
+    var json = {
+        cellWidth: this.mCellWidth,
+        cellHeight: this.mCellHeight,
+        cellXPos: this.mCellGridXPos,
+        cellYPos: this.mCellGridYPos
+    };
+    
+    return json;
 };
