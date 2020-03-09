@@ -92,12 +92,12 @@ MapEditor.prototype.handleInput = function () {
     if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Left)) {
         if (!this.mTileMap.tileHasRenderable(this.mCamera.mouseWCX(), this.mCamera.mouseWCY())) {
             var temp = new Renderable();
-            this.mTileMap.setObjectAt(this.mCamera.mouseWCX(), this.mCamera.mouseWCY(), temp);
+            this.mTileMap.setObjectAtWC(this.mCamera.mouseWCX(), this.mCamera.mouseWCY(), temp);
         }
     }
     if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Right)) {
         if (this.mTileMap.tileHasRenderable(this.mCamera.mouseWCX(), this.mCamera.mouseWCY())) {
-            this.mTileMap.removeObjectAt(this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
+            this.mTileMap.removeObjectAtWC(this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
         }
     }
     

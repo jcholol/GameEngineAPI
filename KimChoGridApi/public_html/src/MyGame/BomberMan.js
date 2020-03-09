@@ -48,7 +48,7 @@ BomberMan.prototype.initialize = function () {
 
    this.mTile0 = new TextureRenderable(this.kTile0);
    
-   this.mTileMap.setObjectAt(0, 0, this.mTile0);
+   this.mTileMap.setObjectAtWC(0, 0, this.mTile0);
 };
 
 BomberMan.prototype.draw = function () {
