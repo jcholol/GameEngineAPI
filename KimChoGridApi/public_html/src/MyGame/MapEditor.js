@@ -13,10 +13,10 @@
 
 function MapEditor() {
     gEngine.Core.initializeEngineCore('GLCanvas', this);
-    
+
     this.mInputGridWidth = null;
     this.mInputGridHeight = null;
-    
+
     this.mCamera = null;
     this.mGrid = null;
     this.mTileMap = null;
@@ -39,7 +39,7 @@ MapEditor.prototype.initialize = function () {
             [0, 0, 600, 600]           // viewport (orgX, orgY, width, height)
             );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
-    
+
     this.mInputGridWidth = document.getElementById('GridWidth');
     this.mInputGridHeight = document.getElementById('GridHeight');
 
@@ -62,7 +62,7 @@ MapEditor.prototype.update = function () {
     this.mTileMap.update();
     this.mTileMap.setDrawLines(true);
     this.mCamera.update();
-    
+
     this.mTileMap.resize(this.mInputGridWidth.value, this.mInputGridHeight.value, 1, 1);
 };
 
@@ -95,20 +95,24 @@ MapEditor.prototype.handleInput = function () {
             this.mTileMap.setObjectAt(this.mCamera.mouseWCX(), this.mCamera.mouseWCY(), temp);
         }
     }
-
-    if (gEngine.Input.isButtonClicked(gEngine.Input.mouseButton.Right)) {
+    if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Right)) {
+        if (this.mTileMap.tileHasRenderable(this.mCamera.mouseWCX(), this.mCamera.mouseWCY())) {
+            this.mTileMap.removeObjectAt(this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
+        }
+    }
+    
+    if (gEngine.Input.isButtonClicked(gEngine.Input.mouseButton.Middle)) {
         this.mMoveCameraOrigin = [this.mCamera.mouseWCX(), this.mCamera.mouseWCY()];
     }
-
-    if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Right)) {
+    if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Middle)) {
         var x = this.mCamera.getWCCenter()[0] + (this.mMoveCameraOrigin[0] - this.mCamera.mouseWCX()) * 10;
         var y = this.mCamera.getWCCenter()[1] + (this.mMoveCameraOrigin[1] - this.mCamera.mouseWCY()) * 10;
-        
+
         this.mCamera.setWCCenter(x, y);
         //this.mMoveCameraOrigin[0] = this.mCamera.mouseWCX();
         //this.mMoveCameraOrigin[1] = this.mCamera.mouseWCY();
     }
-    
+
     if (gEngine.Input.isScrolled()) {
         var deltaY = gEngine.Input.getScrollAmount() / 10;
         this.mCamera.setWCWidth(this.mCamera.getWCWidth() + deltaY);
