@@ -73,7 +73,7 @@ TileMap.prototype.initialize = function (gridLength, gridHeight, cellWidth, cell
  * @returns {void}
  */
 TileMap.prototype.setObjectAtWC = function (x, y, obj) {
-    Grid.prototype.setObjectAt.call(this, x, y, obj);
+    Grid.prototype.setObjectAtWC.call(this, x, y, obj);
     var wc = vec2.fromValues(x, y);
     var cellIndex = this._getIndexFromWC(wc);
     
@@ -92,6 +92,7 @@ TileMap.prototype.setObjectAtWC = function (x, y, obj) {
  * @returns {void}
  */
 TileMap.prototype.setObjectAtIndex = function (x, y, obj) {
+    Grid.prototype.setObjectAtIndex.call(this, x, y, obj);
     this.mGridArray[x][y].setRenderable(obj);
 };
 
@@ -114,7 +115,7 @@ TileMap.prototype.removeObjectAtWC = function (x, y) {
  * @param {int} y - The y index
  * @returns {void}
  */
-TileMap.prototype.setObjectAtIndex = function (x, y) {
+TileMap.prototype.removeObjectAtIndex = function (x, y) {
     this.mGridArray[x][y].removeRenderable();
 };
 
