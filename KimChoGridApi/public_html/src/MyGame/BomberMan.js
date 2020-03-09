@@ -16,29 +16,37 @@ function BomberMan() {
 
    this.mCamera = null;
    this.mTileMap = null;
+   this.mGrid = null;
    
    this.mHero = null;
-
-   // Assets
-   this.kTile0 = "assets/bomberman/backyard_00.png";
-   this.kTile1 = "assets/bomberman/backyard_01.png";
-   this.kTile2 = "assets/bomberman/backyard_02.png";
-   this.kTile3 = "assets/bomberman/backyard_03.png";
+   
+   // TileMap File
+   this.kJSON = "assets/data.json";
+   
+   // Sprite File Container
+    this.kSprites = [];
 }
 gEngine.Core.inheritPrototype(BomberMan, Scene);
 
 BomberMan.prototype.loadScene = function () {
-   gEngine.Textures.loadTexture(this.kTile0);
-   gEngine.Textures.loadTexture(this.kTile1);
-   gEngine.Textures.loadTexture(this.kTile2);
-   gEngine.Textures.loadTexture(this.kTile3);
+    gEngine.TextFileLoader.loadTextFile(this.kJSON);
+    
+    for (var i = 0; i <= 89; i++) {
+        var kName = "assets/bomberman/backyard_" + i + ".png";
+        this.kSprites[i] = kName;
+    }
+    
+    for (var i = 0; i < this.kSprites.length; i++) {
+        gEngine.Textures.loadTexture(this.kSprites[i]);
+    }
 };
 
 BomberMan.prototype.unloadScene = function () {
-   gEngine.Textures.unloadTexture(this.kTile0);
-   gEngine.Textures.unloadTexture(this.kTile1);
-   gEngine.Textures.unloadTexture(this.kTile2);
-   gEngine.Textures.unloadTexture(this.kTile3);
+    gEngine.TextFileLoader.unloadTextFile(this.kJSON);
+    
+    for (var i = 0; i < this.kSprites.length; i++) {
+        gEngine.Textures.unloadTexture(this.kSprites[i]);
+    }
 };
 
 BomberMan.prototype.initialize = function () {
@@ -51,23 +59,20 @@ BomberMan.prototype.initialize = function () {
    this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
 
    this.mTileMap = new TileMap(10, 10, 1, 1);
-   this.mTileMap.setDrawLines(true);
-   this.mTileMap.setGridLineThickness(0.05);
    
    this.initializeHero();
    this.initializeMap();
 };
 
 BomberMan.prototype.initializeHero = function () {
-    this.mHero = new Renderable();
+    var tempRenderable = new Renderable();
+    tempRenderable.setColor([1, 0, 0, 1]);
+    tempRenderable.getXform().setSize(0.75, 0.75);
+    this.mHero = new BomberHero(tempRenderable);
 };
 
 BomberMan.prototype.initializeMap = function () {
-    for (var i = 0; i < this.mTileMap.getGridLength(); i++) {
-        for (var j = 0; j < this.mTileMap.getGridHeight(); j++) {
-            this.mTileMap.setObjectAtIndex(i, j, new TextureRenderable(this.kTile3));
-        }
-    }
+    this.mTileMap.initializeFromJSON(gEngine.ResourceMap.retrieveAsset(this.kJSON));
 };
 
 BomberMan.prototype.draw = function () {
@@ -87,7 +92,25 @@ BomberMan.prototype.update = function () {
 };
 
 BomberMan.prototype.handleInput = function () {
+    var speed = 0.05;
     
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left)) {
+        if (this.mHero.getXform().getXPos() - speed > -5) {
+            this.mHero.getXform().incXPosBy(-speed);
+        }
+    } else if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) {
+        if (this.mHero.getXform().getXPos() + speed < 5) {
+            this.mHero.getXform().incXPosBy(speed);
+        }
+    } else if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Down)) {
+        if (this.mHero.getXform().getYPos() - speed > -5) {
+            this.mHero.getXform().incYPosBy(-speed);
+        }
+    } else if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Up)) {
+        if (this.mHero.getXform().getYPos() + speed < 5) {
+            this.mHero.getXform().incYPosBy(speed);
+        }
+    }
 };
 
 
