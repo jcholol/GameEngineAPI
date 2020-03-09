@@ -1,5 +1,5 @@
 /*
- * File: MyGame.js 
+ * File: MapEditor.js 
  * This is the logic of our game. 
  */
 
@@ -106,7 +106,7 @@ MapEditor.prototype.handleInput = function () {
     }
     if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Right)) {
         if (this.mTileMap.tileHasRenderable(this.mCamera.mouseWCX(), this.mCamera.mouseWCY())) {
-            this.mTileMap.removeObjectAt(this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
+            this.mTileMap.removeObjectAtWC(this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
         }
     }
     

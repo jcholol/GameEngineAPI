@@ -248,7 +248,7 @@ Grid.prototype.getGridHeight = function () {
  * @param {Object} obj - The object you want to put into the grid cell.
  * @returns {void}
  */
-Grid.prototype.setObjectAt = function (x, y, obj) {
+Grid.prototype.setObjectAtWC = function (x, y, obj) {
     var wc = vec2.fromValues(x, y);
     var cellWC = this.cellToWorld(wc);
     
@@ -257,6 +257,18 @@ Grid.prototype.setObjectAt = function (x, y, obj) {
         return;
     }
     
+    obj.getXform().setPosition(cellWC[0], cellWC[1]);
+};
+
+/**
+ * Sets the object at the specified grid index.
+ * @param {int} x - The x index
+ * @param {int} y - The y index
+ * @param {Renderable} obj - The object you want to put into the grid cell.
+ * @returns {void}
+ */
+Grid.prototype.setObjectAtIndex = function (x, y, obj) {
+    var cellWC = this._getWCFromIndex(x, y);
     obj.getXform().setPosition(cellWC[0], cellWC[1]);
 };
 
@@ -324,4 +336,8 @@ Grid.prototype._getIndexFromWC = function (wc) {
     var yIndex = Math.floor(localizedY / this.getCellHeight());
     
     return [xIndex, yIndex];
+};
+
+Grid.prototype._getWCFromIndex = function (x, y) {
+    return this.mGridArray[x][y].cellToWorld();
 };

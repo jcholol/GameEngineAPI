@@ -72,8 +72,8 @@ TileMap.prototype.initialize = function (gridLength, gridHeight, cellWidth, cell
  * @param {Object} obj - The object you want to put into the grid cell.
  * @returns {void}
  */
-TileMap.prototype.setObjectAt = function (x, y, obj) {
-    Grid.prototype.setObjectAt.call(this, x, y, obj);
+TileMap.prototype.setObjectAtWC = function (x, y, obj) {
+    Grid.prototype.setObjectAtWC.call(this, x, y, obj);
     var wc = vec2.fromValues(x, y);
     var cellIndex = this._getIndexFromWC(wc);
     
@@ -85,16 +85,38 @@ TileMap.prototype.setObjectAt = function (x, y, obj) {
 };
 
 /**
+ * Sets the object at the specified grid index.
+ * @param {int} x - The x index
+ * @param {int} y - The y index
+ * @param {Renderable} obj - The object you want to put into the grid cell.
+ * @returns {void}
+ */
+TileMap.prototype.setObjectAtIndex = function (x, y, obj) {
+    Grid.prototype.setObjectAtIndex.call(this, x, y, obj);
+    this.mGridArray[x][y].setRenderable(obj);
+};
+
+/**
  * Removes the object at the specified cell position.
  * @param {int} x - The x-coordinate.
  * @param {int} y - The y-coordinate.
  * @returns {void}
  */
-TileMap.prototype.removeObjectAt = function (x, y) {
+TileMap.prototype.removeObjectAtWC = function (x, y) {
     var wc = vec2.fromValues(x, y);    
     var cellIndex = this._getIndexFromWC(wc);
 
     this.mGridArray[cellIndex[0]][cellIndex[1]].removeRenderable();
+};
+
+/**
+ * Removes the object at the specified grid index.
+ * @param {int} x - The x index
+ * @param {int} y - The y index
+ * @returns {void}
+ */
+TileMap.prototype.removeObjectAtIndex = function (x, y) {
+    this.mGridArray[x][y].removeRenderable();
 };
 
 /**
