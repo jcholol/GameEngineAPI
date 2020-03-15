@@ -64,7 +64,15 @@ Tile.prototype.setCellHeight = function (height) {
  */
 Tile.prototype.setRenderable = function (renderable) {
     this.mRenderable = renderable;
-    console.log(this.mRenderable);
+    //console.log(this.mRenderable);
+};
+
+/**
+ * This method will remove a reference to the tile to a specified renderable.
+ * @returns {null}
+ */
+Tile.prototype.removeRenderable = function () {
+    this.mRenderable = null;
 };
 
 /**
@@ -82,4 +90,16 @@ Tile.prototype._adjustRenderablePosition = function () {
     if (this.mRenderable !== null && this.mRenderable !== undefined) {
         this.mRenderable.getXform().setPosition(cellWC[0], cellWC[1]);
     }
+};
+
+Tile.prototype.toJSON = function () {
+    var json = {
+        cellWidth: this.mCellWidth,
+        cellHeight: this.mCellHeight,
+        cellXPos: this.mCellGridXPos,
+        cellYPos: this.mCellGridYPos,
+        renderable: this.mRenderable
+    };
+    
+    return json;
 };

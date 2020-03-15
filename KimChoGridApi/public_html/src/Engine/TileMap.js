@@ -191,6 +191,10 @@ TileMap.prototype.resize = function (gridLength, gridHeight, cellWidth, cellHeig
     }
 };
 
+/**
+ * This method will export the tile map to a json file
+ * @returns {JSON}
+ */
 TileMap.prototype.exportToJSON = function () {
     var jsonObj = {
         "GridLength": this.mGridLength,
