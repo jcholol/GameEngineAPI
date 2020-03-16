@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Tile.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cell.html">Cell</a><ul class='methods'><li data-type='method'><a href="Cell.html#cellToWorld">cellToWorld</a></li><li data-type='method'><a href="Cell.html#getCellIndexInGrid">getCellIndexInGrid</a></li><li data-type='method'><a href="Cell.html#initialize">initialize</a></li><li data-type='method'><a href="Cell.html#setCellHeight">setCellHeight</a></li><li data-type='method'><a href="Cell.html#setCellIndexInGrid">setCellIndexInGrid</a></li><li data-type='method'><a href="Cell.html#setCellWidth">setCellWidth</a></li><li data-type='method'><a href="Cell.html#update">update</a></li></ul></li><li><a href="Grid.html">Grid</a><ul class='methods'><li data-type='method'><a href="Grid.html#_updateLines">_updateLines</a></li><li data-type='method'><a href="Grid.html#cellToWorld">cellToWorld</a></li><li data-type='method'><a href="Grid.html#draw">draw</a></li><li data-type='method'><a href="Grid.html#drawLines">drawLines</a></li><li data-type='method'><a href="Grid.html#getCellHeight">getCellHeight</a></li><li data-type='method'><a href="Grid.html#getCellWidth">getCellWidth</a></li><li data-type='method'><a href="Grid.html#getGridHeight">getGridHeight</a></li><li data-type='method'><a href="Grid.html#getGridLength">getGridLength</a></li><li data-type='method'><a href="Grid.html#getXform">getXform</a></li><li data-type='method'><a href="Grid.html#initialize">initialize</a></li><li data-type='method'><a href="Grid.html#setCellHeight">setCellHeight</a></li><li data-type='method'><a href="Grid.html#setCellWidth">setCellWidth</a></li><li data-type='method'><a href="Grid.html#setDrawLines">setDrawLines</a></li><li data-type='method'><a href="Grid.html#setGridHeight">setGridHeight</a></li><li data-type='method'><a href="Grid.html#setGridLength">setGridLength</a></li><li data-type='method'><a href="Grid.html#setGridLineThickness">setGridLineThickness</a></li><li data-type='method'><a href="Grid.html#setObjectAtIndex">setObjectAtIndex</a></li><li data-type='method'><a href="Grid.html#setObjectAtWC">setObjectAtWC</a></li><li data-type='method'><a href="Grid.html#update">update</a></li><li data-type='method'><a href="Grid.html#worldToCell">worldToCell</a></li></ul></li><li><a href="Tile.html">Tile</a><ul class='methods'><li data-type='method'><a href="Tile.html#draw">draw</a></li><li data-type='method'><a href="Tile.html#hasRenderable">hasRenderable</a></li><li data-type='method'><a href="Tile.html#removeRenderable">removeRenderable</a></li><li data-type='method'><a href="Tile.html#setCellHeight">setCellHeight</a></li><li data-type='method'><a href="Tile.html#setCellWidth">setCellWidth</a></li><li data-type='method'><a href="Tile.html#setRenderable">setRenderable</a></li></ul></li><li><a href="TileMap.html">TileMap</a><ul class='methods'><li data-type='method'><a href="TileMap.html#draw">draw</a></li><li data-type='method'><a href="TileMap.html#exportToJSON">exportToJSON</a></li><li data-type='method'><a href="TileMap.html#initialize">initialize</a></li><li data-type='method'><a href="TileMap.html#removeObjectAtIndex">removeObjectAtIndex</a></li><li data-type='method'><a href="TileMap.html#removeObjectAtWC">removeObjectAtWC</a></li><li data-type='method'><a href="TileMap.html#setObjectAtIndex">setObjectAtIndex</a></li><li data-type='method'><a href="TileMap.html#setObjectAtWC">setObjectAtWC</a></li><li data-type='method'><a href="TileMap.html#tileHasRenderable">tileHasRenderable</a></li></ul></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-InitializeGrid.html">InitializeGrid</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Tile.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* 
+ * File: Tile.js
+ */
+
+/*jslint node: true, vars: true */
+/*global gEngine: false, SimpleShader: false, Renderable: false, mat4: false, vec3: false, vec2: false, Cell */
+/* find out more about jslint: http://www.jslint.com/help.html */
+"use strict";
+
+/**
+ * Represents a tile in a tile map.
+ * @constructor
+ * @param {int} x - x-axis position in tile map.
+ * @param {int} y - y-axis position in tile map.
+ * @param {int} width - Width of the tile.
+ * @param {int} height - Height of the tile.
+ * @param {Grid} gridParent - Parent that tile is bounded to.
+ * @returns {Tile}
+ */
+function Tile(x, y, width, height, gridParent) {
+    this.mRenderable = null;
+    
+    Cell.call(this, x, y, width, height, gridParent);
+}
+gEngine.Core.inheritPrototype(Tile, Cell);
+
+/**
+ * This method will draw the tile to the camera.
+ * @param {Camera} aCamera - Camera to draw to.
+ * @returns {void}
+ */
+Tile.prototype.draw = function (aCamera) {
+    if (this.mRenderable !== null &amp;&amp; this.mRenderable !== undefined) {
+        this.mRenderable.draw(aCamera);
+    }
+};
+
+/**
+ * Sets the width of the tile.
+ * @param {double} width
+ * @returns {void}
+ */
+Tile.prototype.setCellWidth = function (width) {
+    Cell.prototype.setCellWidth.call(this, width);
+    
+    this._adjustRenderablePosition();
+};
+
+/**
+ * Sets the height of the tile.
+ * @param {double} height
+ * @returns {void}
+ */
+Tile.prototype.setCellHeight = function (height) {
+    Cell.prototype.setCellHeight.call(this, height);
+    
+    this._adjustRenderablePosition();
+};
+
+/**
+ * This method will attach a reference to the tile to a specified renderable.
+ * @param {Renderable} renderable - The renderable to assign to tile.
+ * @returns {void}
+ */
+Tile.prototype.setRenderable = function (renderable) {
+    this.mRenderable = renderable;
+    //console.log(this.mRenderable);
+};
+
+/**
+ * This method will remove a reference to the tile to a specified renderable.
+ * @returns {null}
+ */
+Tile.prototype.removeRenderable = function () {
+    this.mRenderable = null;
+};
+
+/**
+ * Checks to see if the current tile has a reference to a renderable.
+ * @returns {Boolean}
+ */
+Tile.prototype.hasRenderable = function () {
+    return this.mRenderable !== null &amp;&amp; this.mRenderable !== undefined;
+};
+
+// Private Methods
+Tile.prototype._adjustRenderablePosition = function () {
+    var cellWC = this.cellToWorld();
+    
+    if (this.mRenderable !== null &amp;&amp; this.mRenderable !== undefined) {
+        this.mRenderable.getXform().setPosition(cellWC[0], cellWC[1]);
+    }
+};
+
+Tile.prototype.toJSON = function () {
+    var json = {
+        cellWidth: this.mCellWidth,
+        cellHeight: this.mCellHeight,
+        cellXPos: this.mCellGridXPos,
+        cellYPos: this.mCellGridYPos,
+        renderable: this.mRenderable
+    };
+    
+    return json;
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Mon Mar 16 2020 16:30:33 GMT-0700 (PDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

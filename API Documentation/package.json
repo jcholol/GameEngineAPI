@@ -1,0 +1,20 @@
+{
+  "name": "kimchoapi",
+  "version": "1.0.0",
+  "description": "KimCho's API Documentation",
+  "main": "publish.js",
+  "dependencies": {
+    "docdash": "^1.2.0"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.6.3"
+  },
+  "scripts": {
+    "test": "start"
+  },
+  "author": "David Kim and Jonathan Cho",
+  "license": "ISC",
+  "script": {
+    "generate-docs": "node_modules/.bin/jsdoc -c jsdoc.json"
+  }
+}
