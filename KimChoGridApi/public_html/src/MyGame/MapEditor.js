@@ -30,6 +30,8 @@ function MapEditor() {
     this.mGrid = null;
     this.mTileMap = null;
     
+    this.mDrawLines = true;
+    
     // Sprite File Container
     this.kSprites = [];
 
@@ -102,7 +104,7 @@ MapEditor.prototype.draw = function () {
 MapEditor.prototype.update = function () {
     this.handleInput();
     this.mTileMap.update();
-    this.mTileMap.setDrawLines(true);
+    this.mTileMap.setDrawLines(this.mDrawLines);
     this.mCamera.update();
 
     this.mTileMap.resize(this.mInputGridWidth.value, this.mInputGridHeight.value, this.mTileMap.getCellWidth(), this.mTileMap.getCellHeight());
@@ -130,6 +132,14 @@ MapEditor.prototype.handleInput = function () {
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.X)) {
         this.mCamera.setWCWidth(this.mCamera.getWCWidth() + (xDelta) * 10);
     }
+    
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.H)) {
+        if (this.mDrawLines === false) {
+            this.mDrawLines = true;
+        } else {
+            this.mDrawLines = false;
+        }
+    }
 
     if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Left)) {
         if (!this.mTileMap.tileHasRenderable(this.mCamera.mouseWCX(), this.mCamera.mouseWCY())) {
@@ -153,10 +163,10 @@ MapEditor.prototype.handleInput = function () {
         }
     }
 
-    if (gEngine.Input.isButtonClicked(gEngine.Input.mouseButton.Middle)) {
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.J)) {
         this.mMoveCameraOrigin = [this.mCamera.mouseWCX(), this.mCamera.mouseWCY()];
     }
-    if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Middle)) {
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.J)) {
         var x = this.mCamera.getWCCenter()[0] + (this.mMoveCameraOrigin[0] - this.mCamera.mouseWCX()) * 10;
         var y = this.mCamera.getWCCenter()[1] + (this.mMoveCameraOrigin[1] - this.mCamera.mouseWCY()) * 10;
 
