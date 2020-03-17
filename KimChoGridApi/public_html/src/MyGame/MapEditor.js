@@ -105,7 +105,7 @@ MapEditor.prototype.update = function () {
     this.mTileMap.setDrawLines(true);
     this.mCamera.update();
 
-    this.mTileMap.resize(this.mInputGridWidth.value, this.mInputGridHeight.value, 1, 1);
+    this.mTileMap.resize(this.mInputGridWidth.value, this.mInputGridHeight.value, this.mTileMap.getCellWidth(), this.mTileMap.getCellHeight());
 };
 
 MapEditor.prototype.handleInput = function () {
