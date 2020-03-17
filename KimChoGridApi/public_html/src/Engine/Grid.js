@@ -23,9 +23,9 @@ function Grid(gridLength, gridHeight, cellWidth, cellHeight) {
     this.mGridHeight = 0; // Number of cells in the y-axis
     this.mCellWidth = 1;
     this.mCellHeight = 1;
-    
+
     this.mGridMap = null;
-    
+
     // Debug Draw Lines
     this.mGridLineThickness = 1;
     this.mDrawLines = false;
@@ -66,11 +66,11 @@ Grid.prototype.initialize = function (gridLength, gridHeight, cellWidth, cellHei
     this.setGridHeight(gridHeight);
     this.setCellWidth(cellWidth);
     this.setCellHeight(cellHeight);
-    
+
     this.mGridArray = [];
     this.mGridLinesX = [];
     this.mGridLinesY = [];
-    
+
     for (var i = 0; i < this.mGridLength; i++) {
         var yArray = [];
         for (var j = 0; j < this.mGridHeight; j++) {
@@ -78,7 +78,7 @@ Grid.prototype.initialize = function (gridLength, gridHeight, cellWidth, cellHei
         }
         this.mGridArray.push(yArray);
     }
-    
+
     this._updateLines();
 };
 
@@ -110,7 +110,7 @@ Grid.prototype._updateLines = function () {
     var totalGridHeight = this.mGridHeight * this.mCellHeight;
     var startXPos = this.mXform.getXPos() - (totalGridWidth / 2);
     var startYPos = this.mXform.getYPos() - (totalGridHeight / 2);
-    
+
     for (var i = 0; i <= this.mGridLength; i++) {
         var temp = new Renderable();
         temp.getXform().setPosition(startXPos + (i * this.mCellWidth), this.mXform.getYPos());
@@ -118,7 +118,7 @@ Grid.prototype._updateLines = function () {
         temp.getXform().setHeight(totalGridHeight);
         this.mGridLinesX[i] = temp;
     }
-    
+
     for (var j = 0; j <= this.mGridHeight; j++) {
         var temp = new Renderable();
         temp.getXform().setPosition(this.mXform.getXPos(), startYPos + (j * this.mCellHeight));
@@ -137,7 +137,7 @@ Grid.prototype.drawLines = function (aCamera) {
     for (var i = 0; i < this.mGridLinesX.length; i++) {
         this.mGridLinesX[i].draw(aCamera);
     }
-    
+
     for (var j = 0; j < this.mGridLinesY.length; j++) {
         this.mGridLinesY[j].draw(aCamera);
     }
@@ -168,7 +168,7 @@ Grid.prototype.setGridLineThickness = function (thickness) {
  */
 Grid.prototype.setCellWidth = function (width) {
     this.mCellWidth = width;
-    
+
     for (var i = 0; i < this.mGridArray.length; i++) {
         for (var j = 0; j < this.mGridArray[i].length; j++) {
             this.mGridArray[i][j].setCellWidth(this.mCellWidth);
@@ -191,7 +191,7 @@ Grid.prototype.getCellWidth = function () {
  */
 Grid.prototype.setCellHeight = function (height) {
     this.mCellHeight = height;
-    
+
     for (var i = 0; i < this.mGridArray.length; i++) {
         for (var j = 0; j < this.mGridArray[i].length; j++) {
             this.mGridArray[i][j].setCellHeight(this.mCellHeight);
@@ -251,12 +251,12 @@ Grid.prototype.getGridHeight = function () {
 Grid.prototype.setObjectAtWC = function (x, y, obj) {
     var wc = vec2.fromValues(x, y);
     var cellWC = this.cellToWorld(wc);
-    
+
     if (cellWC === null || cellWC === undefined
-            || obj === null || obj === undefined) {
+        || obj === null || obj === undefined) {
         return;
     }
-    
+
     obj.getXform().setPosition(cellWC[0], cellWC[1]);
 };
 
@@ -279,11 +279,11 @@ Grid.prototype.setObjectAtIndex = function (x, y, obj) {
  */
 Grid.prototype.cellToWorld = function (wc) {
     var positionInGrid = this._getIndexFromWC(wc);
-    
+
     if (positionInGrid === null || positionInGrid === undefined) {
         return;
     }
-    
+
     return this.mGridArray[positionInGrid[0]][positionInGrid[1]].cellToWorld();
 };
 
@@ -309,18 +309,18 @@ Grid.prototype.getXform = function () {
 // Private Methods
 Grid.prototype._getIndexFromWC = function (wc) {
     var localizedX = wc[0] - ((this.getXform().getXPos()) - ((this.getGridLength() * this.getCellWidth()) / 2));
-    var localizedY =  + wc[1] - (this.getXform().getYPos() - ((this.getGridHeight() * this.getCellHeight()) / 2));
-    
+    var localizedY = + wc[1] - (this.getXform().getYPos() - ((this.getGridHeight() * this.getCellHeight()) / 2));
+
     // Checks if point is within the grid
     if (localizedX < 0 || localizedX > this.getGridLength() * this.getCellWidth() ||
         localizedY < 0 || localizedY > this.getGridHeight() * this.getCellHeight()) {
         //console.log("out of bounds");
         return;
     }
-    
+
     var xIndex = Math.floor(localizedX / this.getCellWidth());
     var yIndex = Math.floor(localizedY / this.getCellHeight());
-    
+
     return [xIndex, yIndex];
 };
 
