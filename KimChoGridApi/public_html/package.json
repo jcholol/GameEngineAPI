@@ -4,7 +4,7 @@
   "description": "Grid API Test with multiple different Games",
   "main": "index.js",
   "scripts": {
-      "start": "node index.js"
+    "start": "node index.js"
   },
   "author": "David Kim & Jonathan Cho",
   "license": "ISC",
