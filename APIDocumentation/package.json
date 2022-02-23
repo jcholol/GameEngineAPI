@@ -7,7 +7,7 @@
     "docdash": "^1.2.0"
   },
   "devDependencies": {
-    "jsdoc": "^3.6.3"
+    "jsdoc": "^3.6.10"
   },
   "scripts": {
     "test": "start"
